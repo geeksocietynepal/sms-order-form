@@ -786,9 +786,7 @@ select:focus {
                                             data-parsley-pattern="^[A-Za-z ]+$"
                                             data-parsley-pattern-message="Only letters and spaces allowed.">
                                     </div>
-                                    <!-- <small class="text-muted">Format: Country Code + Phone Number</small> -->
-                                    </div>
-
+                                  
                                     <!-- Book Selection -->
                                     <div class="col-md-6 col-sm-12 mb-3">
                                         <label class="form-label" for="bookSelect">Select Book</label>
@@ -1025,7 +1023,7 @@ select:focus {
             });
 
             // Set default checked for Sewa Type: Normal and Payment Type: Free
-            // $('#normal').prop('checked', true);
+            $('#normal').prop('checked', true);
             $('#free').prop('checked', true);
 
             // National/International logic
@@ -1070,7 +1068,6 @@ select:focus {
 
                 // Log the request data
                 console.log('Request data:', data);
-
          
 
                 // Show loading spinner in button and disable it
