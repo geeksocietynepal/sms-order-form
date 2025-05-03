@@ -1024,111 +1024,7 @@ select:focus {
                 $(this).val(value);
             });
 
-            $('#myForm').submit(function (e) {
-                e.preventDefault();  // Prevent default form submission
-                
-                var submitBtn = $('#submitBtn');
-                var btnText = $('#btnText');
-                var btnLoader = $('#btnLoader');
-                
-                const url = "https://script.google.com/macros/s/AKfycbzKWgZF2C34hO2ml6ol9rDoSSyMrKizEFSVHJF3uhXQ5BCogA65kwSHTPu04KY1GMYYnQ/exec ";
-                
-                var formData = new FormData(this);
-
-                const socialMediaGroups = Array.from(document.querySelectorAll('input[name="socialMediaGroup"]:checked'))
-                    .map(checkbox => checkbox.value)
-                    .join(", ");  
-
-                // Get the selected values for 'AdditionalSewa' and join them with commas
-                const additionalSewaDistrictState = Array.from(document.querySelectorAll('input[name="AdditionalSewa"]:checked'))
-                    .map(checkbox => checkbox.value)
-                    .join(", ");  
-
-                    const data = {
-                        nameInput: formData.get('nameInput'),
-                        phone_number: formData.get('phone_number'),
-                        mantraType: formData.get('mantraType'),
-                        mantraTakenDate: formData.get('mantraTakenDate'),
-                        dob: formData.get('dob'),
-                        gender: formData.get('gender'),
-                        member_bhagat: formData.get('member_bhagat'),
-                        yesanotherBhagat: formData.get('member_bhagat') === "Yes" ? formData.get('yesanotherBhagat') : null,
-                        permanentAddressStateInput: formData.get('permanentAddressStateInput'),
-                        permanentAddressDistrictInput: formData.get('permanentAddressDistrictInput'),
-                        permanentAddressMunicipalityInput: formData.get('permanentAddressMunicipalityInput'),
-                        permanentAddressWardInput: formData.get('permanentAddressWardInput'),
-                        permanentAddressToleInput: formData.get('permanentAddressToleInput'),
-                        temporaryAddressStateInput: formData.get('temporaryAddressStateInput'),
-                        temporaryAddressDistrictInput: formData.get('temporaryAddressDistrictInput'),
-                        temporaryAddressMunicipalityInput: formData.get('temporaryAddressMunicipalityInput'),
-                        temporaryAddressWardInput: formData.get('temporaryAddressWardInput'),
-                        temporaryAddressToleInput: formData.get('temporaryAddressToleInput'),
-                        bloodgroup: formData.get('bloodgroup'),
-                        blood_donation: formData.get('blood_donation'),
-                        socialMediaGroups: socialMediaGroups,
-                        social_media_sewa_status: formData.get('social_status'),
-                        additionalSewaDistrictState: additionalSewaDistrictState,
-                        sms_status: formData.get('sms_status'),
-                        smsSewaGroupInput: formData.get('smsSewaGroupInput'),
-                        specialSewaSMSInput: formData.get('specialSewaSMSInput'),
-                        calling_sewa: formData.get('calling_sewa'),
-                        feedback_calling_sewa: formData.get('feedback_calling_sewa'),
-                        otherSewaResponsibilityInput: formData.get('otherSewaResponsibilityInput')
-                    };
-
-
-                console.log(data);
-
-                // Show loading spinner in button and disable it
-                btnLoader.show();
-                btnText.hide();
-                submitBtn.prop('disabled', true);
-
-                // Use SweetAlert2 to show a loading state
-                Swal.fire({
-                    title: 'Processing...',
-                    text: 'Please wait while we process your request.',
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                // Send AJAX request
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: JSON.stringify(data),
-                    success: function (response) {
-                        console.log("Success:", response);
-
-                        // Show success message
-                        Swal.fire({
-                            title: 'Success!',
-                            text: `${response.message}`,
-                            icon: 'success'
-                        }).then(() => {
-                            btnLoader.hide();
-                            btnText.show();
-                            submitBtn.prop('disabled', false);  // Re-enable the button
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("Error:", error);
-
-                        // Show error message
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'An error occurred while sending the request.',
-                            icon: 'error'
-                        }).then(() => {
-                            btnLoader.hide();
-                            btnText.show();
-                            submitBtn.prop('disabled', false);  // Re-enable the button
-                        });
-                    }
-                });
-            });
-
+            
             // Set default checked for Sewa Type: Normal and Payment Type: Free
             // $('#normal').prop('checked', true);
             $('#free').prop('checked', true);
@@ -1198,7 +1094,8 @@ select:focus {
                         }).then(() => {
                             btnLoader.hide();
                             btnText.show();
-                            submitBtn.prop('disabled', false);  // Re-enable the button
+                            location.reload(); 
+                           
                         });
                     },
                     error: function (xhr, status, error) {
@@ -1212,7 +1109,8 @@ select:focus {
                         }).then(() => {
                             btnLoader.hide();
                             btnText.show();
-                            submitBtn.prop('disabled', false);  // Re-enable the button
+                            location.reload(); 
+                            
                         });
                     }
                 });
