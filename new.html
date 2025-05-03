@@ -364,6 +364,28 @@ button {
         border-top-right-radius: 0 !important;
     }
 }
+
+.select2-container--default .select2-selection--single .select2-selection__clear {
+    position: absolute;
+    right: 36px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    font-size: 1.2em;
+    color: #888;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0 8px;
+    margin: 0;
+    height: auto;
+    line-height: 1;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-right: 48px !important; /* Make space for the clear button */
+    text-align: left !important;
+}
 </style>
 <body>
     <div class="">
@@ -512,6 +534,17 @@ button {
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Initialize Select2 for all select elements
+            $('select').each(function() {
+                var firstOption = $(this).find('option:first');
+                var hasEmpty = firstOption.val() === '';
+                $(this).select2({
+                    placeholder: hasEmpty ? firstOption.text() : undefined,
+                    allowClear: false,
+                    width: '100%'
+                });
+            });
+
             // Load address data
             let provincesData = {};
             let districtsData = {};
