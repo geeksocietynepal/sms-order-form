@@ -781,10 +781,11 @@ select:focus {
                                     <label class="form-label" for="buyerFullName">Buyer Full Name</label>
                                 
                                         <input type="text" class="form-control" id="buyerFullName" name="buyerFullName" placeholder="Enter Buyer Full Name" required 
-                                            data-parsley-type="string" 
-                                            data-parsley-minlength="20" 
-                                            data-parsley-maxlength="20">
-                               
+                                            data-parsley-minlength="2" 
+                                            data-parsley-maxlength="50"
+                                            data-parsley-pattern="^[A-Za-z ]+$"
+                                            data-parsley-pattern-message="Only letters and spaces allowed.">
+                                    </div>
                                     <!-- <small class="text-muted">Format: Country Code + Phone Number</small> -->
                                     </div>
 
