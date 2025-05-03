@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="admin/css/pages/parsley.css">
     <link rel="stylesheet" href="admin/css/app.css">
     <link rel="shortcut icon" href="admin/images/favicon.ico">
-    <link rel="stylesheet" href="admin/vendors/choices.js/choices.min.css" />
+    <!-- Add Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <style>
 /* Prevent horizontal scrolling */
@@ -29,8 +30,26 @@ html, body {
 div[style*="background-image"] {
     background-size: cover;
     width: 100%;
-    height: 55vh; 
-    overflow: hidden; 
+    height: 55vh;
+    overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+    div[style*="background-image"] {
+        height: 35vh;
+    }
+}
+
+@media (max-width: 768px) {
+    div[style*="background-image"] {
+        height: 25.3vh;
+    }
+}
+
+@media (max-width: 480px) {
+    div[style*="background-image"] {
+        height: 18vh;
+    }
 }
 
 /* Ensure the card doesn't overflow */
@@ -56,18 +75,15 @@ input, select, textarea {
     box-sizing: border-box; 
 }
 
-
 img, video {
     max-width: 100%;
     height: auto;
     display: block;
 }
 
-
 button {
     width: 100%;
 }
-
 
 .card-body {
     padding: 20px;
@@ -77,74 +93,615 @@ button {
     overflow: hidden; 
 }
      
-     .form-check-input {
-            display: none;
-        }
+.form-check-input {
+    display: none;
+}
 
-        .btn-custom {
-            display: inline-block;
-            padding: 5px 15px;
-            background-color: #461ca0;  
-            color: white;
-            border: 1px solid #2a1061;
-            border-radius: 25px; 
-            text-align: center;
-            cursor: pointer;
-            font-size: 12px;
-            transition: background-color 0.3s ease;
-        }
+.btn-custom {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #461ca0;
+    color: white;
+    border: 1px solid #2a1061;
+    border-radius: 25px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    min-width: 120px;
+}
 
-        
-        .form-check-input:checked + .form-check-label {
-            background-color: #28a745;  
-            border-color: #28a745;
-        }
+.form-check-input:checked + .btn-custom {
+    background-color: #28a745;
+    border-color: #28a745;
+}
 
-        .btn-custom:hover {
-            background-color: #56369b;  
-            border-color: #56369b;
-        }
+.btn-custom:hover {
+    background-color: #56369b;
+    border-color: #56369b;
+}
 
-        
-        .form-check-input:focus + .form-check-label {
-            outline: none;
-            box-shadow: 0 0 0 0.2rem rgba(2, 33, 66, 0.25); 
-        }
-        /* media queries */
+.form-check-input:focus + .btn-custom {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(2, 33, 66, 0.25);
+}
 
-        @media only screen and (max-width: 700px) {
-        
-        div[style*="background-image"] {
-            background-size: cover;
-            background-position: center center;
-            width: 100%;
-            height: 30vh; 
-            overflow: hidden; 
-        }
-        }
+.form-control, .form-select {
+    border-radius: 25px;
+    padding: 12px 20px;
+    border: 1px solid #ced4da;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    color: #495057;
+}
 
-        @media only screen and ( min-width: 700px) and ( max-width: 1200px) {
-            /* Set the background image area */
-            div[style*="background-image"] {
-                background-size: cover;
-                background-position: center center;
-                width: 100%;
-                height: 25vh; 
-                overflow: hidden; 
-            }
-        }
+.form-control:focus, .form-select:focus {
+    border-color: #461ca0;
+    box-shadow: 0 0 0 0.2rem rgba(70, 28, 160, 0.15);
+}
+
+.address-section {
+    background-color: #f8f9fa;
+    padding: 24px;
+    border-radius: 15px;
+    margin-bottom: 24px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.address-section h5 {
+    color: #461ca0;
+    margin-bottom: 24px;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.phone-search-results {
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    display: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+}
+
+.phone-search-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.phone-search-item:hover {
+    background-color: #f8f9fa;
+}
+
+.select2-container--default .select2-selection--single {
+    min-height: 48px !important;
+    height: 48px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    font-size: 1rem !important;
+    box-sizing: border-box !important;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    line-height: 48px !important;
+    padding-left: 0 !important;
+    padding-right: 30px !important;
+    font-size: 1rem !important;
+    display: flex;
+    align-items: center;
+    height: 48px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    right: 12px !important;
+}
+
+.input-group .form-control {
+    height: 48px !important;
+    font-size: 1rem !important;
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .select2-container--default .select2-selection--single,
+    .input-group .form-control {
+        min-height: 44px !important;
+        height: 44px !important;
+        font-size: 1rem !important;
+    }
+    .select2-container .select2-selection--single .select2-selection__rendered {
+        line-height: 44px !important;
+        height: 44px !important;
+    }
+    img, .responsive-img {
+        width: 100% !important;
+        height: auto !important;
+        max-width: 100% !important;
+        display: block;
+        object-fit: cover;
+    }
+}
+
+.select2-dropdown {
+    border-radius: 15px;
+    border: 1px solid #ced4da;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #461ca0;
+    color: white;
+}
+
+.select2-container--default .select2-results__option {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #461ca0;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.form-text {
+    color: #6c757d;
+    font-size: 0.85rem;
+    margin-top: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .btn-custom {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 8px;
+    }
+    
+    .form-check {
+        flex-direction: column;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    .input-group .form-select {
+        border-right: none;
+        border-bottom: 1px solid #ced4da;
+        width: 100%;
+    }
+
+    .input-group .form-control {
+        width: 100%;
+    }
+}
+
+/* Add these styles to the existing <style> section */
+.input-group {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch;
+}
+
+.input-group .select2-container {
+    min-width: 120px !important;
+    width: 120px !important;
+    flex: 0 0 120px !important;
+}
+
+.input-group .form-control {
+    flex: 1 1 0% !important;
+    width: auto !important;
+}
+
+.input-group .form-control {
+    border: none !important;
+    border-radius: 0 !important;
+    border-top-right-radius: 25px !important;
+    border-bottom-right-radius: 25px !important;
+    background: transparent;
+    height: 48px !important;
+    font-size: 1rem !important;
+    padding-left: 18px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__clear {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    .input-group {
+        /* flex-direction: column; */
+        border-radius: 20px;
+        flex-direction: row !important;
+    }
+    .input-group .select2-container--default .select2-selection--single {
+        min-width: 120px !important;
+        width: 120px !important;
+        border-top-left-radius: 20px !important;
+        border-bottom-left-radius: 20px !important;
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        height: 44px !important;
+        font-size: 1rem !important;
+    }
+    .input-group .form-control {
+        width: 100% !important;
+        border-bottom-left-radius: 0 !important;
+        border-top-right-radius: 20px !important;
+        border-bottom-right-radius: 20px !important;
+        border-top-left-radius: 0 !important;
+        height: 44px !important;
+        font-size: 1rem !important;
+    }
+}
+
+.select2-container--default .select2-selection--single .select2-selection__clear {
+    position: absolute;
+    right: 36px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    font-size: 1.2em;
+    color: #888;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0 8px;
+    margin: 0;
+    height: auto;
+    line-height: 1;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-right: 48px !important; /* Make space for the clear button */
+    text-align: left !important;
+}
+
+#phone {
+    border: 1px solid #7c3aed !important; 
+    position: relative;        /* Softer purple */
+    /* border-left: none !important;                 Assume part of input group */
+    border-top-right-radius: 5px !important;      /* Rounded corners on the right */
+    border-bottom-right-radius: 5px !important;
+    border-top-left-radius: 0 !important;         /* Flat corners on the left */
+    border-bottom-left-radius: 0 !important;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08); /* Subtle shadow */
+    transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s; /* Added background transition */
+    background: #fafaff !important;
+    padding: 0.5rem 0.75rem; /* Added padding for better text spacing */
+    font-size: 1rem; /* Ensure consistent font size */
+    line-height: 1.5; /* Ensure consistent line height */
+    color: #495057; /* Standard input text color */
+    /* Ensure it takes available space within the input group if needed */
+    /* flex-grow: 1; */ /* Uncomment if needed based on parent display */
+    /* width: auto; */ /* Uncomment if needed based on parent display */
+}
+
+/* Enhanced hover state */
+#phone:hover {
+    border-color: #6d28d9 !important; /* Slightly darker purple on hover */
+}
+
+/* Enhanced focus state - align with select focus */
+#phone:focus {
+    border-color: #461ca0 !important;             /* Deeper purple on focus */
+    box-shadow: 0 0 0 2px rgba(70, 28, 160, 0.15); /* Match select focus shadow */
+    outline: none !important;                     /* Remove default outline */
+    background-color: #fff !important;            /* Brighter background on focus */
+    /* z-index: 3; Ensure focus state appears above adjacent elements */
+}
+
+/* Style placeholder */
+#phone::placeholder {
+    color: #adb5bd;
+    opacity: 1; /* Firefox */
+}
+
+#phone:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: #adb5bd;
+}
+
+.select2-selection .select2-selection--single {
+    border: none !important;
+}
+
+#phone::-ms-input-placeholder { /* Microsoft Edge */
+   color: #adb5bd;
+}
 
 
 
+#buyerFullName {
+    border: 1px solid #7c3aed !important; 
+    position: relative;        /* Softer purple */
+    /* border-left: none !important;                 Assume part of input group */
+    border-top-right-radius: 5px !important;      /* Rounded corners on the right */
+    border-bottom-right-radius: 5px !important;
+    border-top-left-radius: 0 !important;         /* Flat corners on the left */
+    border-bottom-left-radius: 0 !important;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08); /* Subtle shadow */
+    transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s; /* Added background transition */
+    background: #fafaff !important;
+    padding: 0.5rem 0.75rem; /* Added padding for better text spacing */
+    font-size: 1rem; /* Ensure consistent font size */
+    line-height: 1.5; /* Ensure consistent line height */
+    color: #495057; /* Standard input text color */
+    /* Ensure it takes available space within the input group if needed */
+    /* flex-grow: 1; */ /* Uncomment if needed based on parent display */
+    /* width: auto; */ /* Uncomment if needed based on parent display */
+}
+
+/* Enhanced hover state */
+#buyerFullName:hover {
+    border-color: #6d28d9 !important; /* Slightly darker purple on hover */
+}
+
+/* Enhanced focus state - align with select focus */
+#buyerFullName:focus {
+    border-color: #461ca0 !important;             /* Deeper purple on focus */
+    box-shadow: 0 0 0 2px rgba(70, 28, 160, 0.15); /* Match select focus shadow */
+    outline: none !important;                     /* Remove default outline */
+    background-color: #fff !important;            /* Brighter background on focus */
+    /* z-index: 3; Ensure focus state appears above adjacent elements */
+}
+
+/* Style placeholder */
+#buyerFullName::placeholder {
+    color: #adb5bd;
+    opacity: 1; /* Firefox */
+}
+
+#buyerFullName:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: #adb5bd;
+}
+
+#buyerFullName::-ms-input-placeholder { /* Microsoft Edge */
+   color: #adb5bd;
+}
+
+
+#address {
+    border: 1px solid #7c3aed !important; 
+    position: relative;        /* Softer purple */
+    /* border-left: none !important;                 Assume part of input group */
+    border-top-right-radius: 5px !important;      /* Rounded corners on the right */
+    border-bottom-right-radius: 5px !important;
+    border-top-left-radius: 0 !important;         /* Flat corners on the left */
+    border-bottom-left-radius: 0 !important;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08); /* Subtle shadow */
+    transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s; /* Added background transition */
+    background: #fafaff !important;
+    padding: 0.5rem 0.75rem; /* Added padding for better text spacing */
+    font-size: 1rem; /* Ensure consistent font size */
+    line-height: 1.5; /* Ensure consistent line height */
+    color: #495057; /* Standard input text color */
+    /* Ensure it takes available space within the input group if needed */
+    /* flex-grow: 1; */ /* Uncomment if needed based on parent display */
+    /* width: auto; */ /* Uncomment if needed based on parent display */
+}
+
+/* Enhanced hover state */
+#address:hover {
+    border-color: #6d28d9 !important; /* Slightly darker purple on hover */
+}
+
+/* Enhanced focus state - align with select focus */
+#address:focus {
+    border-color: #461ca0 !important;             /* Deeper purple on focus */
+    box-shadow: 0 0 0 2px rgba(70, 28, 160, 0.15); /* Match select focus shadow */
+    outline: none !important;                     /* Remove default outline */
+    background-color: #fff !important;            /* Brighter background on focus */
+    /* z-index: 3; Ensure focus state appears above adjacent elements */
+}
+
+/* Style placeholder */
+#address::placeholder {
+    color: #adb5bd;
+    opacity: 1; /* Firefox */
+}
+
+#address:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: #adb5bd;
+}
+
+#address::-ms-input-placeholder { /* Microsoft Edge */
+   color: #adb5bd;
+}
+
+
+
+#landmark {
+    border: 1px solid #7c3aed !important; 
+    position: relative;        /* Softer purple */
+    /* border-left: none !important;                 Assume part of input group */
+    border-top-right-radius: 5px !important;      /* Rounded corners on the right */
+    border-bottom-right-radius: 5px !important;
+    border-top-left-radius: 0 !important;         /* Flat corners on the left */
+    border-bottom-left-radius: 0 !important;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08); /* Subtle shadow */
+    transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s; /* Added background transition */
+    background: #fafaff !important;
+    padding: 0.5rem 0.75rem; /* Added padding for better text spacing */
+    font-size: 1rem; /* Ensure consistent font size */
+    line-height: 1.5; /* Ensure consistent line height */
+    color: #495057; /* Standard input text color */
+    /* Ensure it takes available space within the input group if needed */
+    /* flex-grow: 1; */ /* Uncomment if needed based on parent display */
+    /* width: auto; */ /* Uncomment if needed based on parent display */
+}
+
+/* Enhanced hover state */
+#landmark:hover {
+    border-color: #6d28d9 !important; /* Slightly darker purple on hover */
+}
+
+/* Enhanced focus state - align with select focus */
+#landmark:focus {
+    border-color: #461ca0 !important;             /* Deeper purple on focus */
+    box-shadow: 0 0 0 2px rgba(70, 28, 160, 0.15); /* Match select focus shadow */
+    outline: none !important;                     /* Remove default outline */
+    background-color: #fff !important;            /* Brighter background on focus */
+    /* z-index: 3; Ensure focus state appears above adjacent elements */
+}
+
+/* Style placeholder */
+#landmark::placeholder {
+    color: #adb5bd;
+    opacity: 1; /* Firefox */
+}
+
+#landmark:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: #adb5bd;
+}
+
+#landmark::-ms-input-placeholder { /* Microsoft Edge */
+   color: #adb5bd;
+}
+
+#postalCode {
+    border: 1px solid #7c3aed !important; 
+    position: relative;        /* Softer purple */
+    /* border-left: none !important;                 Assume part of input group */
+    border-top-right-radius: 5px !important;      /* Rounded corners on the right */
+    border-bottom-right-radius: 5px !important;
+    border-top-left-radius: 0 !important;         /* Flat corners on the left */
+    border-bottom-left-radius: 0 !important;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08); /* Subtle shadow */
+    transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s; /* Added background transition */
+    background: #fafaff !important;
+    padding: 0.5rem 0.75rem; /* Added padding for better text spacing */
+    font-size: 1rem; /* Ensure consistent font size */
+    line-height: 1.5; /* Ensure consistent line height */
+    color: #495057; /* Standard input text color */
+    /* Ensure it takes available space within the input group if needed */
+    /* flex-grow: 1; */ /* Uncomment if needed based on parent display */
+    /* width: auto; */ /* Uncomment if needed based on parent display */
+}
+
+/* Enhanced hover state */
+#postalCode:hover {
+    border-color: #6d28d9 !important; /* Slightly darker purple on hover */
+}
+
+/* Enhanced focus state - align with select focus */
+#postalCode:focus {
+    border-color: #461ca0 !important;             /* Deeper purple on focus */
+    box-shadow: 0 0 0 2px rgba(70, 28, 160, 0.15); /* Match select focus shadow */
+    outline: none !important;                     /* Remove default outline */
+    background-color: #fff !important;            /* Brighter background on focus */
+    /* z-index: 3; Ensure focus state appears above adjacent elements */
+}
+
+/* Style placeholder */
+#postalCode::placeholder {
+    color: #adb5bd;
+    opacity: 1; /* Firefox */
+}
+
+#postalCode:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: #adb5bd;
+}
+
+#postalCode::-ms-input-placeholder { /* Microsoft Edge */
+   color: #adb5bd;
+}
+
+/* Add border to select fields and Select2 */
+select, .select2-container--default .select2-selection--single {
+    border: 1px solid #7c3aed !important;         /* Softer purple */
+    border-radius: 5px !important;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08); /* Subtle shadow */
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background: #fafaff !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--single,
+select:focus {
+    border-color: #461ca0 !important;             /* Deeper purple on focus */
+    box-shadow: 0 0 0 2px rgba(70, 28, 160, 0.15);
+    outline: none !important;
+}
+
+/* For Select2 rendered text (including flag) */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 1rem;
+}
+
+/* For Select2 dropdown options */
+.select2-results__option {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
+
+/* For native selects */
+.form-select {
+    padding-left: 16px !important;
+    padding-right: 32px !important; /* space for dropdown arrow */
+    font-size: 1rem;
+    min-height: 44px;
+    box-sizing: border-box;
+}
+
+/* For input fields */
+.form-control, #phone {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    font-size: 1rem;
+    min-height: 44px;
+    box-sizing: border-box;
+}
+
+.country-code-small {
+    font-size: 0.85em;
+    color: #888;
+    font-weight: 500;
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+  .select2-results__option img,
+  .select2-selection__rendered img {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    object-fit: cover;
+    margin-right: 8px !important;
+  }
+}
 </style>
 <body>
     <div class="">
         <div class="">
             <div class="card badge-gray-100">
                 <div class="row">
-                    <!-- Use responsive background with no horizontal scroll -->
                     <div style="background-image: url('admin/images/guruji_cover.jpg'); background-size: cover; ">
-                        <!-- card body -->
                         <div class="card-body p-20" style="height: 100%; display: flex; justify-content: center; align-items: center;">
                             <div id="carouselExampleCaptions" class="lide text-center widget-carousel" data-bs-ride="carousel">
                                 <div class="carousel-inner">
@@ -164,711 +721,129 @@ button {
                     </div>
                 </div>
 
-                <!-- Form Section -->
                 <div class="row justify-content-center ">
                     <div class="col-lg-10 col-md-10 col-sm-12">
                         <div class="p-4 p-md-5">
                             <form method="POST" data-parsley-validate id="myForm">
                                 <div class="row">
-                                    <!-- Full Name Field -->
+                                    <!-- Order Type -->
+                                    <div class="col-md-12  mb-3">
+                                        <label class="form-label" for="orderType">Order Type</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="orderType" id="orderTypeNone" value="" checked >
+                                            <input class="form-check-input" type="radio" name="orderType" id="national" value="National" required>
+                                            <label class="btn-custom" for="national">National (Nepal)</label>
+                                            <input class="form-check-input" type="radio" name="orderType" id="international" value="International" required>
+                                            <label class="btn-custom" for="international">International</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Sewa Type -->
                                     <div class="col-md-6 col-sm-12 mb-3">
-                                        <label for="name">Full Name</label>
-                                        <input type="text" name="nameInput" id="nameInput" class="form-control" data-parsley-required-message="This field is required." data-parsley-required="true">
+                                        <label class="form-label" for="sewaType">Sewa Type</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="sewaType" id="normal" value="Normal" required>
+                                            <label class="btn-custom" for="normal">Normal</label>
+
+                                            <input class="form-check-input" type="radio" name="sewaType" id="urgent" value="Urgent" required>
+                                            <label class="btn-custom" for="urgent">Urgent</label>
+                                        </div>
                                     </div>
 
-                                    <!-- Phone Number Field -->
+                  
+                                    <!-- Payment Type -->
                                     <div class="col-md-6 col-sm-12 mb-3">
-                                        <label for="phone">WhatsApp Number</label>
-                                        <input type="number" name="phone_number" id="id_phone" class="form-control" data-parsley-pattern="/^[9][6-9]\d{8}$/i" data-parsley-error-message="You must enter a valid phone number." data-parsley-required-message="This field is required." data-parsley-required="true" maxlength="10">
+                                        <label class="form-label" for="paymentType">Payment Type</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="paymentType" id="free" value="Free" required>
+                                            <label class="btn-custom" for="free">Free</label>
+
+                                            <input class="form-check-input" type="radio" name="paymentType" id="paid" value="Paid" required>
+                                            <label class="btn-custom" for="paid">Paid</label>
+                                        </div>
                                     </div>
 
-                                      <!-- Mantra Type Radio Button -->
+                                    <!-- Phone Number -->
+                                    <div class="col-md-12 col-sm-12 mb-3">
+                                    <label class="form-label" for="phone">Phone Number</label>
+                    
+                                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter phone number" required 
+                                            data-parsley-type="number" 
+                                            data-parsley-minlength="10" 
+                                            data-parsley-maxlength="10">
+                                        <div id="order-search-results" class="phone-search-results"></div>
+                                    
+                                    <!-- <small class="text-muted">Format: Country Code + Phone Number</small> -->
+                                    </div>
+                
+
+                                    <!-- Buyer Name -->
                                     <div class="col-md-6 col-sm-12 mb-3">
-                                        <label for="mantraType">Mantra Type</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="mantraType" id="pratham" value="Pratham" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="pratham">
-                                                Pratham
-                                            </label>
-
-                                            <input class="form-check-input" type="radio" name="mantraType" id="satnaam" value="Satnaam" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="satnaam">
-                                                Satnaam
-                                            </label>
-
-                                            <input class="form-check-input" type="radio" name="mantraType" id="saarnaam" value="Saarnaam" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom" for="saarnaam">
-                                                Saarnaam
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <!-- Mantra Taken Date Field -->
-                                    <div class="col-md-6 col-sm-12 mb-3">
-                                        <label for="mantraTakenDate">All Mantra Taken Date (yyyy-mm-dd)</label>
-                                        <input type="text" name="mantraTakenDate" id="mantraTakenDate" class="form-control" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                    </div>
-
-                                    <!-- Date of Birth  -->
-                                    <div class="col-md-6 col-sm-12 mb-3">
-                                        <label for="dob">Date of Birth (yyyy-mm-dd)</label>
-                                        <input type="text" name="dob" id="dob" class="form-control"  data-parsley-required-message="This field is required." data-parsley-required="true" maxlength="10">
-                                    </div>
-
-                                    <!-- Gender Radio Button -->
-                                    <div class="col-md-6 col-sm-12 mb-3">
-                                        <label for="gender">Gender</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="gender" id="male" value="Male" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="male">
-                                                Male
-                                            </label>
-
-                                            <input class="form-check-input" type="radio" name="gender" id="female" value="Female" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="female">
-                                                Female
-                                            </label>
-
-                                            <input class="form-check-input" type="radio" name="gender" id="others" value="Others" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom" for="others">
-                                                Others
-                                            </label>
-                                        </div>
-                                    </div>
-
-                            
-                                    <div class="">
-                                        <label for="gender">Another member Bhagat in your family?</label>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="member_bhagat" id="yes" value="Yes" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom" for="yes">
-                                                Yes
-                                            </label>
-                                        </div>
-
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="member_bhagat" id="no" value="No" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom" for="no">
-                                                No
-                                            </label>
-                                        </div>
-
-                                        <div id="anotherField" style="display: none;">
-                                            <input type="text" name="yesanotherBhagat" id="yesanotherBhagat" class="form-control d-inline-block"  placeholder="Enter Name of Member">
-                                        </div>
-                                        <script>
-                                            document.getElementById("yes").addEventListener("click", function () {
-                                                document.getElementById("anotherField").style.display = "block"; 
-                                            });
-    
-                                          
-                                            document.getElementById("no").addEventListener("click", function () {
-                                                document.getElementById("anotherField").style.display = "none"; 
-                                            });
-                                        </script>
-                                    </div>
-
-                                    <!-- Permanet Address -->
-                                     <!-- Provinces -->
-                                     <div class="col-md-12 col-sm-12 mb-3">
-                                        <label for="permanentAddressStateInput">Permanent Address</label>
-                                        <div class="row">
-                                            <!-- Province Select -->
-                                            <div class="col-12 col-md-3 mb-3">
-                                                <select name="permanentAddressStateInput" id="permanentAddressStateInput" class="form-control" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                                    <option value="" selected disabled>Select Province</option>
-                                                    <option value="koshi">Koshi</option>
-                                                    <option value="madhesh">Madhesh</option>
-                                                    <option value="bagmati">Bagmati</option>
-                                                    <option value="gandaki">Gandaki</option>
-                                                    <option value="lumbini">Lumbini</option>
-                                                    <option value="karnali">Karnali</option>
-                                                    <option value="sudurpaschim">Sudurpaschim</option>
-                                                </select>
-                                            </div>
-
-                                            <!-- District Select -->
-                                            <div class="col-12 col-md-4 mb-3">
-                                                <select name="permanentAddressDistrictInput" id="permanentAddressDistrictInput" class="form-control" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                                    <option value="" selected disabled>Select District</option>
-                                                    <!-- District options will be populated dynamically -->
-                                                </select>
-                                            </div>
-
-                                            <script>
-                                                document.addEventListener("DOMContentLoaded", function () {
-                                                    // Populate districts based on selected state
-                                                    const stateSelect = document.getElementById("permanentAddressStateInput");
-                                                    const districtSelect = document.getElementById("permanentAddressDistrictInput");
-                                            
-                                                    const districts = {
-                                                        
-                                                        "koshi":["भोजपुर", "धनकुटा", "इलाम", "झापा", "खोटाँग", "मोरंग", "ओखलढुंगा", "पांचथर", "संखुवासभा", "सोलुखुम्बू", "सुनसरी", "ताप्लेजुंग", "तेह्रथुम", "उदयपुर"],
-                                                        "madhesh":["बारा", "धनुषा", "महोत्तरी", "पर्सा", "रौतहट", "सप्तरी", "सर्लाही", "सिराहा"],
-                                                        "bagmati":["काठमाडौँ", "ललितपुर", "भक्तपुर", "मकवानपुर", "चितवन", "काभ्रेपलान्चोक", "सिन्धुपाल्चोक", "दोलखा", "रामेछाप", "रसुवा", "नुवाकोट","धादिंङ्ग"],
-                                                        "gandaki":["बागलुङ", "गोरखा", "कास्की", "लमजुङ", "मनाङ", "मुस्ताङ", "म्याग्दी", "नवलपुर", "पर्वत", "स्याङग्जा", "तनहुँ"],
-                                                        "lumbini":["अर्घाखाँची", "बाँके", "बर्दिया", "दाङ", "गुल्मी", "कपिलवस्तु", "परासी", "पाल्पा", "प्युठान", "रोल्पा", "पूर्वी रूकुम", "रुपन्देही"],
-                                                        "karnali":["दैलेख", "डोल्पा", "हुम्ला", "जाजरकोट", "जुम्ला", "कालिकोट", "मुगु", "रुकुम पश्चिम", "सल्यान", "सुर्खेत"],
-                                                        "sudurpaschim":["अछाम", "बैतडी", "बझाङ", "बाजुरा", "डोटी", "कैलाली", "कञ्चनपुर","डडेलधुरा"]
-                                                    };
-                                            
-                                                    // Populate initial district options if state is selected
-                                                    stateSelect.addEventListener("change", function () {
-                                                        let selectedState = this.value;
-                                                        let districtOptions = districts[selectedState] || [];
-                                                        let districtOptionHTML = districtOptions.map(district => `<option value="${district}">${district}</option>`).join('');
-                                                        districtSelect.innerHTML = `<option value="">Select a district</option>` + districtOptionHTML;
-                                            
-                                                        // Clear the municipality dropdown
-                                                        document.getElementById("permanentAddressMunicipalityInput").innerHTML = `<option value="">Select a  municipality</option>`;
-                                                    });
-                                            
-                                                    // Initial trigger to populate districts if default state is set
-                                                    stateSelect.dispatchEvent(new Event('change'));
-                                                });
-                                            </script>
-
-                                            <!-- Municipality Select -->
-                                            <div class="col-12 col-md-4 mb-3">
-                                                <select name="permanentAddressMunicipalityInput" id="permanentAddressMunicipalityInput" class="form-control" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                                    <option value="" selected disabled>Select Municipality</option>
-                                                    <!-- Municipality options will be populated dynamically -->
-                                                </select>
-                                            </div>
-
-                                            
-                                            <script>
-                                                document.getElementById("permanentAddressDistrictInput").addEventListener("change", function () {
-                                                    let selectedDistrict = this.value;
-                                                    let municipalitySelect = document.getElementById("permanentAddressMunicipalityInput");
-                                                    let municipalityOptionHTML = "";
-
-                                                    const municipalities = {
-                                                    "भोजपुर": ['अरुण', 'आमचोक', 'टेम्केमैयुङ', 'पौवादुङमा', 'भोजपुर', 'रामप्रसाद राई', 'षडानन्द', 'साल्पासिलिछो', 'हतुवागढी'],
-                                            "धनकुटा": ['चौविसे', 'छथर जोरपाटी', 'धनकुटा', 'पाख्रिबास', 'महालक्ष्मी', 'सहिदभूमि', 'साँगुरीगढी'],
-                                            "इलाम": ['ईलाम', 'चुलाचुली', 'देउमाई', 'फाकफोकथुम', 'माई', 'माईजोगमाई', 'माङसेबुङ', 'रोङ', 'सन्दकपुर', 'सूर्योदय'],
-                                            "झापा": ['अर्जुनधारा', 'कचनकवल', 'कन्काई', 'कमल', 'गौरादह', 'गौरीगंज', 'झापा', 'दमक', 'बाह्रदशी', 'बुद्धशान्ति', 'भद्रपुर', 'मेचीनगर', 'विर्तामोड', 'शिवशताक्षी', 'हल्दिवारी'],
-                                            "खोटाँग": ['ऐसेलुखर्क', 'केपिलासगढी', 'खोटेहाङ', 'जन्तेढुंगा', 'दिक्तेल रुपाकोट मझुवागढी', 'दिप्रुङ चुइचुम्मा', 'रावा बेसी', 'वराहपोखरी', 'साकेला', 'हलेसी तुवाचुङ'],
-                                            "मोरंग": ['उर्लावारी', 'कटहरी', 'कानेपोखरी', 'केरावारी', 'ग्रामथान', 'जहदा', 'धनपालथान', 'पथरी शनिश्चरे', 'बुढीगंगा', 'बेलवारी', 'मिक्लाजुङ', 'रंगेली', 'रतुवामाई', 'लेटाङ', 'विराटनगर', 'सुनवर्षि', 'सुन्दरहरैचा'],
-                                            "ओखलढुंगा": ['खिजिदेम्बा', 'चम्पादेवी', 'चिशंखुगढी', 'मानेभञ्याङ', 'मोलुङ', 'लिखु', 'सिद्दिचरण', 'सुनकोशी'],
-                                            "पांचथर": ['कुम्मायक', 'तुम्बेवा', 'फालेलुङ', 'फाल्गुनन्द', 'फिदिम', 'मिक्लाजुङ', 'याङवरक', 'हिलिहाङ'],
-                                            "संखुवासभा": ['खाँदवारी', 'चिचिला', 'चैनपुर', 'धर्मदेवी', 'पाँचखपन', 'भोटखोला', 'मकालु', 'मादी', 'सभापोखरी', 'सिलीचोङ'],
-                                            "सोलुखुम्बू": ['खुम्वु पासाङल्हमु', 'थुलुङ दुधकोशी', 'नेचासल्यान', 'माप्य दुधकोशी', 'माहाकुलुङ', 'लिखु पिके', 'सोताङ', 'सोलुदुधकुण्ड'],
-                                            "सुनसरी": ['ईटहरी', 'ईनरुवा', 'कोशी', 'गढी', 'दुहवी', 'देवानगञ्ज', 'धरान', 'बराहक्षेत्र', 'बर्जु', 'भोक्राहा नरसिंह', 'रामधुनी', 'हरिनगर'],
-                                            "ताप्लेजुंग": ['आठराई त्रिवेणी', 'पाथीभरा याङवरक', 'फक्ताङलुङ', 'फुङलिङ', 'मिक्वाखोला', 'मेरिङदेन', 'मैवाखोला', 'सिदिङ्वा', 'सिरीजङ्घा'],
-                                            "तेह्रथुम": ['आठराई', 'छथर', 'फेदाप', 'मेन्छयायेम', 'म्याङलुङ', 'लालीगुराँस'],
-                                            "उदयपुर": ['उदयपुरगढी', 'कटारी', 'चौदण्डीगढी', 'ताप्ली', 'त्रियुगा', 'रौतामाई', 'लिम्चुङ्बुङ', 'वेलका'],
-                                            "पर्सा": ['कालिकामाई', 'छिपहरमाई', 'जगरनाथपुर', 'जिरा भवानी', 'ठोरी', 'धोबीनी', 'पकाहा मैनपुर', 'पटेर्वा सुगौली', 'पर्सागढी', 'पोखरिया', 'बहुदरमाई', 'बिन्दबासिनी', 'बिरगंज', 'सखुवा प्रसौनी'],
-                                            "बारा": ['आदर्श कोटवाल', 'करैयामाई', 'कलैया', 'कोल्हवी', 'जीतपुर सिमरा', 'देवताल', 'निजगढ', 'पचरौता', 'परवानीपुर', 'प्रसौनी', 'फेटा', 'बारागढी', 'महागढीमाई', 'विश्रामपुर', 'सिम्रौनगढ', 'सुवर्ण'],
-                                            "रौतहट": ['ईशनाथ', 'कटहरिया', 'गढीमाई', 'गरुडा', 'गुजरा', 'गौर', 'चन्द्रपुर', 'दुर्गा भगवती', 'देवाही गोनाही', 'परोहा', 'फतुवाबिजयपुर', 'बृन्दावन', 'बौधीमाई', 'माधव नारायण', 'मौलापुर', 'यमुनामाई', 'राजदेवी', 'राजपुर'],
-                                            "सर्लाही": ['ईश्वरपुर', 'कविलासी', 'कौडेना', 'गोडैटा', 'चक्रघट्टा', 'चन्द्रनगर', 'धनकौल', 'पर्सा', 'बरहथवा', 'बलरा', 'बसबरीया', 'बागमती', 'ब्रह्मपुरी', 'मलंगवा', 'रामनगर', 'लालबन्दी', 'विष्णु', 'हरिपुर', 'हरिपुर्वा', 'हरिवन'],
-                                            "सिराहा": ['अर्नमा', 'औरही', 'कर्जन्हा', 'कल्याणपुर', 'गोलबजार', 'धनगढीमाई', 'नरहा', 'नवराजपुर', 'बरियारपट्टी', 'भगवानपुर', 'मिर्चैयाँ', 'लक्ष्मीपुर पतारी', 'लहान', 'विष्णुपुर', 'सखुवानान्कारकट्टी', 'सिरहा', 'सुखीपुर'],
-                                            "धनुषा": ['औरही', 'कमला', 'क्षिरेश्वरनाथ', 'गणेशमान चारनाथ', 'जनकनन्दिनी', 'जनकपुरधाम', 'धनुषाधाम', 'धनौजी', 'नगराइन', 'बटेश्वर', 'मिथिला', 'मिथिला बिहारी', 'मुखियापट्टी मुसहरमिया', 'लक्ष्मीनिया', 'विदेह', 'शहीदनगर', 'सबैला', 'हंसपुर'],
-                                            "सप्तरी": ['अग्निसाइर कृष्णासरवन', 'कञ्चनरुप', 'खडक', 'छिन्नमस्ता', 'डाक्नेश्वरी', 'तिरहुत', 'तिलाठी कोईलाडी', 'बलान-बिहुल', 'बिष्णुपुर', 'बोदेबरसाईन', 'महादेवा', 'राजगढ', 'राजविराज', 'रुपनी', 'शम्भुनाथ', 'सप्तकोशी', 'सुरुङ्\u200dगा', 'हनुमाननगर कङ्\u200cकालिनी'],
-                                            "महोत्तरी": ['एकडारा', 'औरही', 'गौशाला', 'जलेश्वर', 'पिपरा', 'बर्दिबास', 'बलवा', 'भँगाहा', 'मटिहानी', 'मनरा शिसवा', 'महोत्तरी', 'रामगोपालपुर', 'लोहरपट्टी', 'साम्सी', 'सोनमा'],
-                                            "भक्तपुर": ['चाँगुनारायण', 'भक्तपुर', 'मध्यपुर थिमी', 'सूर्यविनायक'],
-                                            "चितवन": ['इच्छाकामना', 'कालिका', 'खैरहनी', 'भरतपुर', 'माडी', 'रत्ननगर', 'राप्ती'],
-                                            "धादिंङ्ग": ['खनियाबास', 'गङ्गाजमुना', 'गजुरी', 'गल्छी', 'ज्वालामूखी', 'त्रिपुरासुन्दरी', 'थाक्रे', 'धुनीबेंशी', 'निलकण्ठ', 'नेत्रावती डबजोङ', 'बेनीघाट रोराङ्ग', 'रुवी भ्याली', 'सिद्धलेक'],
-                                            "दोलखा": ['कालिन्चोक', 'गौरीशङ्कर', 'जिरी', 'तामाकोशी', 'भिमेश्वर', 'मेलुङ्ग', 'विगु', 'वैतेश्वर', 'शैलुङ्ग'],
-                                            "काठमाडौँ": ['कागेश्वरी मनोहरा', 'काठमाण्डौं', 'कीर्तिपुर', 'गोकर्णेश्वर', 'चन्द्रागिरी', 'टोखा', 'तारकेश्वर', 'दक्षिणकाली', 'नागार्जुन', 'बुढानिलकण्ठ', 'शङ्खरापुर'],
-                                            "काभ्रेपलान्चोक": ['खानीखोला', 'चौंरीदेउराली', 'तेमाल', 'धुलिखेल', 'नमोबुद्ध', 'पनौती', 'पाँचखाल', 'बनेपा', 'बेथानचोक', 'भुम्लु', 'मण्डनदेउपुर', 'महाभारत', 'रोशी'],
-                                            "ललितपुर": ['कोन्ज्योसोम', 'गोदावरी', 'बागमती', 'महाङ्काल', 'महालक्ष्मी', 'ललितपुर'],
-                                            "मकवानपुर": ['इन्द्रसरोबर', 'कैलाश', 'थाहा', 'बकैया', 'बाग्मति', 'भिमफेदी', 'मकवानपुरगढी', 'मनहरी', 'राक्सिराङ्ग', 'हेटौडा'],
-                                            "नुवाकोट": ['ककनी', 'किस्पाङ', 'तादी', 'तारकेश्वर', 'दुप्चेश्वर', 'पञ्चकन्या', 'बेलकोटगढी', 'म्यगङ', 'लिखु', 'विदुर', 'शिवपुरी', 'सुर्यगढी'],
-                                            "रामेछाप": ['उमाकुण्ड', 'खाँडादेवी', 'गोकुलगङ्गा', 'दोरम्बा', 'मन्थली', 'रामेछाप', 'लिखु तामाकोशी', 'सुनापती'],
-                                            "रसुवा": ['आमाछोदिङमो', 'उत्तरगया', 'कालिका', 'गोसाईकुण्ड', 'नौकुण्ड'],
-                                            "सिन्धुली": ['कमलामाई', 'गोलन्जर', 'घ्याङलेख', 'तीनपाटन', 'दुधौली', 'फिक्कल', 'मरिण', 'सुनकोशी', 'हरिहरपुरगढी'],
-                                            "सिन्धुपाल्चोक": ['ईन्द्रावती', 'चौतारा साँगाचोकगढी', 'जुगल', 'त्रिपुरासुन्दरी', 'पाँचपोखरी थाङपाल', 'बलेफी', 'बाह्रविसे', 'भोटेकोशी', 'मेलम्ची', 'लिसङ्खु पाखर', 'सुनकोशी', 'हेलम्बु'],
-                                            "बागलुङ": ['काठेखोला', 'गल्कोट', 'जैमूनी', 'ढोरपाटन', 'तमानखोला', 'ताराखोला', 'निसीखोला', 'बागलुङ', 'वडिगाड', 'वरेङ'],
-                                            "गोरखा": ['अजिरकोट', 'आरूघाट', 'गण्डकी', 'गोरखा', 'चुमनुव्री', 'धार्चे', 'पालुङटार', 'बारपाक सुलिकोट', 'भिमसेनथापा', 'शहिद लखन', 'सिरानचोक'],
-                                            "कास्की": ['अन्नपूर्ण', 'पोखरा', 'माछापुच्छ्रे', 'मादी', 'रूपा'],
-                                            "लमजुङ": ['क्व्होलासोथार', 'दूधपोखरी', 'दोर्दी', 'बेसीशहर', 'मध्यनेपाल', 'मर्स्याङदी', 'रारइनास', 'सुन्दरबजार'],
-                                            "मनाङ": ['चामे', 'नार्पा भूमि', 'नासोँ', 'मनाङ ङिस्याङ'],
-                                            "मुस्ताङ": ['घरपझोङ', 'थासाङ', 'लो-घेकर दामोदरकुण्ड', 'लोमन्थाङ', 'वारागुङ मुक्तिक्षेत्र'],
-                                            "म्याग्दी": ['अन्नपुर्ण', 'धवलागिरी', 'बेनी', 'मंगला', 'मालिका', 'रघुगंगा'],
-                                            "नवलपुर": ['कावासोती', 'गैडाकोट', 'देवचुली', 'बुलिङटार', 'बौदीकाली', 'मध्यविन्दु', 'विनयी त्रिवेणी', 'हुप्सेकोट'],
-                                            "पर्वत": ['कुश्मा', 'जलजला', 'पैयूं', 'फलेवास', 'महाशिला', 'मोदी', 'विहादी'],
-                                            "स्याङग्जा": ['अर्जुनचौपारी', 'आँधिखोला', 'कालीगण्डकी', 'गल्याङ', 'चापाकोट', 'पुतलीबजार', 'फेदीखोला', 'बिरुवा', 'भीरकोट', 'वालिङ', 'हरिनास'],
-                                            "तनहुँ": ['आँबुखैरेनी', 'ऋषिङ्ग', 'घिरिङ', 'देवघाट', 'भानु', 'भिमाद', 'म्याग्दे', 'वन्दिपुर', 'व्यास', 'शुक्लागण्डकी'],
-                                            "कपिलवस्तु": ['कपिलवस्तु', 'कृष्णनगर', 'बाणगंगा', 'बुद्धभुमी', 'महाराजगंज', 'मायादेवी', 'यसोधरा', 'विजयनगर', 'शिवराज', 'सुद्धोधन'],
-                                            "परासी": ['पाल्हीनन्दन', 'प्रतापपुर', 'बर्दघाट', 'रामग्राम', 'सरावल', 'सुनवल', 'सुस्ता'],
-                                            "रुपन्देही": ['ओमसतिया', 'कन्चन', 'कोटहीमाई', 'गैडहवा', 'तिलोत्तमा', 'देवदह', 'बुटवल', 'मर्चवारी', 'मायादेवी', 'रोहिणी', 'लुम्बिनी सांस्कृतिक', 'शुद्धोधन', 'सम्मरीमाई', 'सिद्धार्थनगर', 'सियारी', 'सैनामैना'],
-                                            "अर्घाखाँची": ['छत्रदेव', 'पाणिनी', 'भूमिकास्थान', 'मालारानी', 'शितगंगा', 'सन्धिखर्क'],
-                                            "गुल्मी": ['ईस्मा', 'कालीगण्डकी', 'गुल्मी दरबार', 'चन्द्रकोट', 'छत्रकोट', 'धुर्कोट', 'मदाने', 'मालिका', 'मुसिकोट', 'रुरुक्षेत्र', 'रेसुङ्गा', 'सत्यवती'],
-                                            "पाल्पा": ['तानसेन', 'तिनाउ', 'निस्दी', 'पूर्वखोला', 'बगनासकाली', 'माथागढी', 'रम्भा', 'रामपुर', 'रिब्दिकोट', 'रैनादेवी छहरा'],
-                                            "दाङ": ['गढवा', 'घोराही', 'तुल्सीपुर', 'दंगीशरण', 'बंगलाचुली', 'बबई', 'राजपुर', 'राप्ती', 'लमही', 'शान्तिनगर'],
-                                            "प्युठान": ['ऐरावती', 'गौमुखी', 'झिमरुक', 'नौवहिनी', 'प्यूठान', 'मल्लरानी', 'माण्डवी', 'सरुमारानी', 'स्वर्गद्वारी'],
-                                            "रोल्पा": ['गंगादेव', 'त्रिवेणी', 'थवाङ', 'परिवर्तन', 'माडी', 'रुन्टीगढी', 'रोल्पा', 'लुङग्री', 'सुनछहरी', 'सुनिल स्मृति'],
-                                            "पूर्वी रूकुम": ['पुथा उत्तरगंगा', 'भूमे', 'सिस्ने'],
-                                            "बाँके": ['कोहलपुर', 'खजुरा', 'जानकी', 'डुडुवा', 'नरैनापुर', 'नेपालगंज', 'बैजनाथ', 'राप्ती सोनारी'],
-                                            "बर्दिया": ['गुलरिया', 'गेरुवा', 'ठाकुरबाबा', 'बढैयाताल', 'बाँसगढी', 'बारबर्दिया', 'मधुवन', 'राजापुर'],
-                                            "रुकुम पश्चिम": ['आठबिसकोट', 'चौरजहारी', 'त्रिवेणी', 'बाँफिकोट', 'मुसिकोट', 'सानी भेरी'],
-                                            "सल्यान": ['कपुरकोट', 'कालिमाटी', 'कुमाख', 'छत्रेश्वरी', 'त्रिवेणी', 'दार्मा', 'बनगाड कुपिण्डे', 'बागचौर', 'शारदा', 'सिद्ध कुमाख'],
-                                            "डोल्पा": ['काईके', 'छार्का ताङसोङ', 'जगदुल्ला', 'ठूली भेरी', 'डोल्पो बुद्ध', 'त्रिपुरासुन्दरी', 'मुड्केचुला', 'शे फोक्सुन्डो'],
-                                            "हुम्ला": ['अदानचुली', 'खार्पुनाथ', 'चंखेली', 'ताँजाकोट', 'नाम्खा', 'सर्केगाड', 'सिमकोट'],
-                                            "जुम्ला": ['कनकासुन्दरी', 'गुठिचौर', 'चन्दननाथ', 'तातोपानी', 'तिला', 'पातारासी', 'सिंजा', 'हिमा'],
-                                            "कालिकोट": ['खाँडाचक्र', 'तिलागुफा', 'नरहरिनाथ', 'पचालझरना', 'पलाता', 'महावै', 'रास्कोट', 'शुभ कालीका', 'सान्नी त्रिवेणी'],
-                                            "मुगु": ['खत्याड', 'छायाँनाथ रारा', 'मुगुम कार्मारोंग', 'सोरु'],
-                                            "सुर्खेत": ['गुर्भाकोट', 'चिङ्गाड', 'चौकुने', 'पञ्चपुरी', 'बराहताल', 'बीरेन्द्रनगर', 'भेरीगंगा', 'लेकवेशी', 'सिम्ता'],
-                                            "दैलेख": ['आठबीस', 'गुराँस', 'चामुण्डा विन्द्रासैनी', 'ठाँटीकाँध', 'डुंगेश्वर', 'दुल्लु', 'नारायण', 'नौमुले', 'भगवतीमाई', 'भैरवी', 'महावु'],
-                                            "जाजरकोट": ['कुसे', 'छेडागाड', 'जुनीचाँदे', 'नलगाड', 'बारेकोट', 'भेरी', 'शिवालय'],
-                                            "दार्चुला": ['अपिहिमाल', 'दुहुँ', 'नौगाड', 'ब्याँस', 'महाकाली', 'मार्मा', 'मालिकार्जुन', 'लेकम', 'शैल्यशिखर'],
-                                            "बझाङ": ['केदारस्युँ', 'खप्तडछान्ना', 'छबिसपाथिभेरा', 'जयपृथ्वी', 'तलकोट', 'थलारा', 'दुर्गाथली', 'बुंगल', 'मष्टा', 'वित्थडचिर', 'साइपाल', 'सूर्मा'],
-                                            "बाजुरा": ['खप्तड छेडेदह', 'गौमुल', 'जगन्\u200dनाथ', 'त्रिवेणी', 'बडीमालिका', 'बुढीगंगा', 'बुढीनन्दा', 'स्वामीकार्तिक खापर', 'हिमाली'],
-                                            "बैतडी": ['डीलासैनी', 'दशरथचन्द', 'दोगडाकेदार', 'पञ्चेश्वर', 'पाटन', 'पुर्चौडी', 'मेलौली', 'शिवनाथ', 'सिगास', 'सुर्नया'],
-                                            "डोटी": ['आदर्श', 'के.आई.सिं.', 'जोरायल', 'दिपायल सिलगढी', 'पूर्वीचौकी', 'बडीकेदार', 'बोगटान फुड्सिल', 'शिखर', 'सायल'],
-                                            "अछाम": ['कमलबजार', 'चौरपाटी', 'ढकारी', 'तुर्माखाँद', 'पन्चदेवल विनायक', 'बान्निगढी जयगढ', 'मंगलसेन', 'मेल्लेख', 'रामारोशन', 'साँफेबगर'],
-                                            "डडेलधुरा": ['अजयमेरु', 'अमरगढी', 'आलिताल', 'गन्यापधुरा', 'नवदुर्गा', 'परशुराम', 'भागेश्वर'],
-                                            "कञ्चनपुर": ['कृष्णपुर', 'पुर्नवास', 'बेलडाडी', 'बेलौरी', 'भीमदत्त', 'माहाकाली', 'लालझाडी', 'वेदकोट', 'शुक्लाफाँटा'],
-                                            "कैलाली": ['कैलारी', 'गोदावरी', 'गौरीगंगा', 'घोडाघोडी', 'चुरे', 'जानकी', 'जोशीपुर', 'टिकापुर', 'धनगढी', 'बर्दगोरिया', 'भजनी', 'मोहन्याल', 'लम्कीचुहा'],
-
-                                                        // Add other district municipalities here...
-                                                    };
-
-                                                    if (municipalities[selectedDistrict]) {
-                                                        municipalityOptionHTML = municipalities[selectedDistrict].map(municipality => `<option value="${municipality}">${municipality}</option>`).join('');
-                                                    }
-
-                                                    municipalitySelect.innerHTML = `<option value="">Select a  municipality</option>` + municipalityOptionHTML;
-                                                });
-                                            </script>
-
-                                            <!-- Ward Number -->
-                                            <div class="col-12 col-md-4 mb-3">
-                                                <input type="number" name="permanentAddressWardInput" id="permanentAddressWardInput" class="form-control" placeholder="Ward Number">
-                                            </div>
-
-                                            <!-- Tole/Address -->
-                                            <div class="col-12 col-md-4 mb-3">
-                                                <input type="text" name="permanentAddressToleInput" id="permanentAddressToleInput" class="form-control" placeholder="Tole/Address">
-                                            </div>
-
-                                         </div>
-                                        
-                                     </div>
-                                     <div class="col-md-6 col-sm-12 mb-3">
-                                        <label for="bloodgroup">Blood Group</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="bloodgroup" id="o_positive" value="O+" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="o_positive">
-                                                O+
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="radio" name="bloodgroup" id="o_negative" value="O-" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="o_negative">
-                                                O-
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="radio" name="bloodgroup" id="a_positive" value="A+" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="a_positive">
-                                                A+
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="radio" name="bloodgroup" id="a_negative" value="A-" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="a_negative">
-                                                A-
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="radio" name="bloodgroup" id="b_positive" value="B+" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="b_positive">
-                                                B+
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="radio" name="bloodgroup" id="b_negative" value="B-" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="b_negative">
-                                                B-
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="radio" name="bloodgroup" id="ab_positive" value="AB+" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="ab_positive">
-                                                AB+
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="radio" name="bloodgroup" id="ab_negative" value="AB-" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom" for="ab_negative">
-                                                AB-
-                                            </label>
-                                        
-                                            
-
-                                                
-                                        </div>
-                                        
-                                        
-                                     </div>
-                                     <div class="col-md-6 col-sm-12 mb-3">
-                                        <label for="gender">Available for Blood Donation?</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="blood_donation" id="byes" value="Yes" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom" for="byes">
-                                                Yes
-                                            </label>
-                                                                            
-                                            <input class="form-check-input" type="radio" name="blood_donation" id="bno" value="No" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom" for="bno">
-                                                No
-                                            </label>
-
-                                        </div>
-                                     
-                                     </div>
-
-                                     <!-- Current Address -->
-                                     <!-- Provinces -->
-                                     <div class="col-md-12 col-sm-12 mb-3">
-                                        <label for="temporaryAddressStateInput">Current Address</label>
-                                        <div class="row">
-                                            <!-- Province Select -->
-                                            <div class="col-12 col-md-3 mb-3">
-                                                <select name="temporaryAddressStateInput" id="temporaryAddressStateInput" class="form-control" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                                    <option value="" selected disabled>Select Province</option>
-                                                    <option value="koshi">Koshi</option>
-                                                    <option value="madhesh">Madhesh</option>
-                                                    <option value="bagmati">Bagmati</option>
-                                                    <option value="gandaki">Gandaki</option>
-                                                    <option value="lumbini">Lumbini</option>
-                                                    <option value="karnali">Karnali</option>
-                                                    <option value="sudurpaschim">Sudurpaschim</option>
-                                                </select>
-                                            </div>
-
-                                            <!-- District Select -->
-                                            <div class="col-12 col-md-4 mb-3">
-                                                <select name="temporaryAddressDistrictInput" id="temporaryAddressDistrictInput" class="form-control" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                                    <option value="" selected disabled>Select District</option>
-                                                    <!-- District options will be populated dynamically -->
-                                                </select>
-                                            </div>
-
-                                            <script>
-                                                document.addEventListener("DOMContentLoaded", function () {
-                                                    // Populate districts based on selected state
-                                                    const stateSelect = document.getElementById("temporaryAddressStateInput");
-                                                    const districtSelect = document.getElementById("temporaryAddressDistrictInput");
-                                            
-                                                    const districts = {
-                                                        
-                                                        "koshi":["भोजपुर", "धनकुटा", "इलाम", "झापा", "खोटाँग", "मोरंग", "ओखलढुंगा", "पांचथर", "संखुवासभा", "सोलुखुम्बू", "सुनसरी", "ताप्लेजुंग", "तेह्रथुम", "उदयपुर"],
-                                                        "madhesh":["बारा", "धनुषा", "महोत्तरी", "पर्सा", "रौतहट", "सप्तरी", "सर्लाही", "सिराहा"],
-                                                        "bagmati":["काठमाडौँ", "ललितपुर", "भक्तपुर", "मकवानपुर", "चितवन", "काभ्रेपलान्चोक", "सिन्धुपाल्चोक", "दोलखा", "रामेछाप", "रसुवा", "नुवाकोट","धादिंङ्ग"],
-                                                        "gandaki":["बागलुङ", "गोरखा", "कास्की", "लमजुङ", "मनाङ", "मुस्ताङ", "म्याग्दी", "नवलपुर", "पर्वत", "स्याङग्जा", "तनहुँ"],
-                                                        "lumbini":["अर्घाखाँची", "बाँके", "बर्दिया", "दाङ", "गुल्मी", "कपिलवस्तु", "परासी", "पाल्पा", "प्युठान", "रोल्पा", "पूर्वी रूकुम", "रुपन्देही"],
-                                                        "karnali":["दैलेख", "डोल्पा", "हुम्ला", "जाजरकोट", "जुम्ला", "कालिकोट", "मुगु", "रुकुम पश्चिम", "सल्यान", "सुर्खेत"],
-                                                        "sudurpaschim":["अछाम", "बैतडी", "बझाङ", "बाजुरा", "डोटी", "कैलाली", "कञ्चनपुर","डडेलधुरा"]
-                                                    };
-                                            
-                                                    // Populate initial district options if state is selected
-                                                    stateSelect.addEventListener("change", function () {
-                                                        let selectedState = this.value;
-                                                        let districtOptions = districts[selectedState] || [];
-                                                        let districtOptionHTML = districtOptions.map(district => `<option value="${district}">${district}</option>`).join('');
-                                                        districtSelect.innerHTML = `<option value="">Select a district</option>` + districtOptionHTML;
-                                            
-                                                        // Clear the municipality dropdown
-                                                        document.getElementById("temporaryAddressMunicipalityInput").innerHTML = `<option value="">Select a  municipality</option>`;
-                                                    });
-                                            
-                                                    // Initial trigger to populate districts if default state is set
-                                                    stateSelect.dispatchEvent(new Event('change'));
-                                                });
-                                            </script>
-
-
-                                            <!-- Municipality Select -->
-                                            <div class="col-12 col-md-4 mb-3">
-                                                <select name="temporaryAddressMunicipalityInput" id="temporaryAddressMunicipalityInput" class="form-control" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                                    <option value="" selected disabled>Select Municipality</option>
-                                                    <!-- Municipality options will be populated dynamically -->
-                                                </select>
-                                            </div>
-
-                                            <script>
-                                                document.getElementById("temporaryAddressDistrictInput").addEventListener("change", function () {
-                                                    let selectedDistrict = this.value;
-                                                    let municipalitySelect = document.getElementById("temporaryAddressMunicipalityInput");
-                                                    let municipalityOptionHTML = "";
-
-                                                    const municipalities = {
-                                                    "भोजपुर": ['अरुण', 'आमचोक', 'टेम्केमैयुङ', 'पौवादुङमा', 'भोजपुर', 'रामप्रसाद राई', 'षडानन्द', 'साल्पासिलिछो', 'हतुवागढी'],
-                                            "धनकुटा": ['चौविसे', 'छथर जोरपाटी', 'धनकुटा', 'पाख्रिबास', 'महालक्ष्मी', 'सहिदभूमि', 'साँगुरीगढी'],
-                                            "इलाम": ['ईलाम', 'चुलाचुली', 'देउमाई', 'फाकफोकथुम', 'माई', 'माईजोगमाई', 'माङसेबुङ', 'रोङ', 'सन्दकपुर', 'सूर्योदय'],
-                                            "झापा": ['अर्जुनधारा', 'कचनकवल', 'कन्काई', 'कमल', 'गौरादह', 'गौरीगंज', 'झापा', 'दमक', 'बाह्रदशी', 'बुद्धशान्ति', 'भद्रपुर', 'मेचीनगर', 'विर्तामोड', 'शिवशताक्षी', 'हल्दिवारी'],
-                                            "खोटाँग": ['ऐसेलुखर्क', 'केपिलासगढी', 'खोटेहाङ', 'जन्तेढुंगा', 'दिक्तेल रुपाकोट मझुवागढी', 'दिप्रुङ चुइचुम्मा', 'रावा बेसी', 'वराहपोखरी', 'साकेला', 'हलेसी तुवाचुङ'],
-                                            "मोरंग": ['उर्लावारी', 'कटहरी', 'कानेपोखरी', 'केरावारी', 'ग्रामथान', 'जहदा', 'धनपालथान', 'पथरी शनिश्चरे', 'बुढीगंगा', 'बेलवारी', 'मिक्लाजुङ', 'रंगेली', 'रतुवामाई', 'लेटाङ', 'विराटनगर', 'सुनवर्षि', 'सुन्दरहरैचा'],
-                                            "ओखलढुंगा": ['खिजिदेम्बा', 'चम्पादेवी', 'चिशंखुगढी', 'मानेभञ्याङ', 'मोलुङ', 'लिखु', 'सिद्दिचरण', 'सुनकोशी'],
-                                            "पांचथर": ['कुम्मायक', 'तुम्बेवा', 'फालेलुङ', 'फाल्गुनन्द', 'फिदिम', 'मिक्लाजुङ', 'याङवरक', 'हिलिहाङ'],
-                                            "संखुवासभा": ['खाँदवारी', 'चिचिला', 'चैनपुर', 'धर्मदेवी', 'पाँचखपन', 'भोटखोला', 'मकालु', 'मादी', 'सभापोखरी', 'सिलीचोङ'],
-                                            "सोलुखुम्बू": ['खुम्वु पासाङल्हमु', 'थुलुङ दुधकोशी', 'नेचासल्यान', 'माप्य दुधकोशी', 'माहाकुलुङ', 'लिखु पिके', 'सोताङ', 'सोलुदुधकुण्ड'],
-                                            "सुनसरी": ['ईटहरी', 'ईनरुवा', 'कोशी', 'गढी', 'दुहवी', 'देवानगञ्ज', 'धरान', 'बराहक्षेत्र', 'बर्जु', 'भोक्राहा नरसिंह', 'रामधुनी', 'हरिनगर'],
-                                            "ताप्लेजुंग": ['आठराई त्रिवेणी', 'पाथीभरा याङवरक', 'फक्ताङलुङ', 'फुङलिङ', 'मिक्वाखोला', 'मेरिङदेन', 'मैवाखोला', 'सिदिङ्वा', 'सिरीजङ्घा'],
-                                            "तेह्रथुम": ['आठराई', 'छथर', 'फेदाप', 'मेन्छयायेम', 'म्याङलुङ', 'लालीगुराँस'],
-                                            "उदयपुर": ['उदयपुरगढी', 'कटारी', 'चौदण्डीगढी', 'ताप्ली', 'त्रियुगा', 'रौतामाई', 'लिम्चुङ्बुङ', 'वेलका'],
-                                            "पर्सा": ['कालिकामाई', 'छिपहरमाई', 'जगरनाथपुर', 'जिरा भवानी', 'ठोरी', 'धोबीनी', 'पकाहा मैनपुर', 'पटेर्वा सुगौली', 'पर्सागढी', 'पोखरिया', 'बहुदरमाई', 'बिन्दबासिनी', 'बिरगंज', 'सखुवा प्रसौनी'],
-                                            "बारा": ['आदर्श कोटवाल', 'करैयामाई', 'कलैया', 'कोल्हवी', 'जीतपुर सिमरा', 'देवताल', 'निजगढ', 'पचरौता', 'परवानीपुर', 'प्रसौनी', 'फेटा', 'बारागढी', 'महागढीमाई', 'विश्रामपुर', 'सिम्रौनगढ', 'सुवर्ण'],
-                                            "रौतहट": ['ईशनाथ', 'कटहरिया', 'गढीमाई', 'गरुडा', 'गुजरा', 'गौर', 'चन्द्रपुर', 'दुर्गा भगवती', 'देवाही गोनाही', 'परोहा', 'फतुवाबिजयपुर', 'बृन्दावन', 'बौधीमाई', 'माधव नारायण', 'मौलापुर', 'यमुनामाई', 'राजदेवी', 'राजपुर'],
-                                            "सर्लाही": ['ईश्वरपुर', 'कविलासी', 'कौडेना', 'गोडैटा', 'चक्रघट्टा', 'चन्द्रनगर', 'धनकौल', 'पर्सा', 'बरहथवा', 'बलरा', 'बसबरीया', 'बागमती', 'ब्रह्मपुरी', 'मलंगवा', 'रामनगर', 'लालबन्दी', 'विष्णु', 'हरिपुर', 'हरिपुर्वा', 'हरिवन'],
-                                            "सिराहा": ['अर्नमा', 'औरही', 'कर्जन्हा', 'कल्याणपुर', 'गोलबजार', 'धनगढीमाई', 'नरहा', 'नवराजपुर', 'बरियारपट्टी', 'भगवानपुर', 'मिर्चैयाँ', 'लक्ष्मीपुर पतारी', 'लहान', 'विष्णुपुर', 'सखुवानान्कारकट्टी', 'सिरहा', 'सुखीपुर'],
-                                            "धनुषा": ['औरही', 'कमला', 'क्षिरेश्वरनाथ', 'गणेशमान चारनाथ', 'जनकनन्दिनी', 'जनकपुरधाम', 'धनुषाधाम', 'धनौजी', 'नगराइन', 'बटेश्वर', 'मिथिला', 'मिथिला बिहारी', 'मुखियापट्टी मुसहरमिया', 'लक्ष्मीनिया', 'विदेह', 'शहीदनगर', 'सबैला', 'हंसपुर'],
-                                            "सप्तरी": ['अग्निसाइर कृष्णासरवन', 'कञ्चनरुप', 'खडक', 'छिन्नमस्ता', 'डाक्नेश्वरी', 'तिरहुत', 'तिलाठी कोईलाडी', 'बलान-बिहुल', 'बिष्णुपुर', 'बोदेबरसाईन', 'महादेवा', 'राजगढ', 'राजविराज', 'रुपनी', 'शम्भुनाथ', 'सप्तकोशी', 'सुरुङ्\u200dगा', 'हनुमाननगर कङ्\u200cकालिनी'],
-                                            "महोत्तरी": ['एकडारा', 'औरही', 'गौशाला', 'जलेश्वर', 'पिपरा', 'बर्दिबास', 'बलवा', 'भँगाहा', 'मटिहानी', 'मनरा शिसवा', 'महोत्तरी', 'रामगोपालपुर', 'लोहरपट्टी', 'साम्सी', 'सोनमा'],
-                                            "भक्तपुर": ['चाँगुनारायण', 'भक्तपुर', 'मध्यपुर थिमी', 'सूर्यविनायक'],
-                                            "चितवन": ['इच्छाकामना', 'कालिका', 'खैरहनी', 'भरतपुर', 'माडी', 'रत्ननगर', 'राप्ती'],
-                                            "धादिंङ्ग": ['खनियाबास', 'गङ्गाजमुना', 'गजुरी', 'गल्छी', 'ज्वालामूखी', 'त्रिपुरासुन्दरी', 'थाक्रे', 'धुनीबेंशी', 'निलकण्ठ', 'नेत्रावती डबजोङ', 'बेनीघाट रोराङ्ग', 'रुवी भ्याली', 'सिद्धलेक'],
-                                            "दोलखा": ['कालिन्चोक', 'गौरीशङ्कर', 'जिरी', 'तामाकोशी', 'भिमेश्वर', 'मेलुङ्ग', 'विगु', 'वैतेश्वर', 'शैलुङ्ग'],
-                                            "काठमाडौँ": ['कागेश्वरी मनोहरा', 'काठमाण्डौं', 'कीर्तिपुर', 'गोकर्णेश्वर', 'चन्द्रागिरी', 'टोखा', 'तारकेश्वर', 'दक्षिणकाली', 'नागार्जुन', 'बुढानिलकण्ठ', 'शङ्खरापुर'],
-                                            "काभ्रेपलान्चोक": ['खानीखोला', 'चौंरीदेउराली', 'तेमाल', 'धुलिखेल', 'नमोबुद्ध', 'पनौती', 'पाँचखाल', 'बनेपा', 'बेथानचोक', 'भुम्लु', 'मण्डनदेउपुर', 'महाभारत', 'रोशी'],
-                                            "ललितपुर": ['कोन्ज्योसोम', 'गोदावरी', 'बागमती', 'महाङ्काल', 'महालक्ष्मी', 'ललितपुर'],
-                                            "मकवानपुर": ['इन्द्रसरोबर', 'कैलाश', 'थाहा', 'बकैया', 'बाग्मति', 'भिमफेदी', 'मकवानपुरगढी', 'मनहरी', 'राक्सिराङ्ग', 'हेटौडा'],
-                                            "नुवाकोट": ['ककनी', 'किस्पाङ', 'तादी', 'तारकेश्वर', 'दुप्चेश्वर', 'पञ्चकन्या', 'बेलकोटगढी', 'म्यगङ', 'लिखु', 'विदुर', 'शिवपुरी', 'सुर्यगढी'],
-                                            "रामेछाप": ['उमाकुण्ड', 'खाँडादेवी', 'गोकुलगङ्गा', 'दोरम्बा', 'मन्थली', 'रामेछाप', 'लिखु तामाकोशी', 'सुनापती'],
-                                            "रसुवा": ['आमाछोदिङमो', 'उत्तरगया', 'कालिका', 'गोसाईकुण्ड', 'नौकुण्ड'],
-                                            "सिन्धुली": ['कमलामाई', 'गोलन्जर', 'घ्याङलेख', 'तीनपाटन', 'दुधौली', 'फिक्कल', 'मरिण', 'सुनकोशी', 'हरिहरपुरगढी'],
-                                            "सिन्धुपाल्चोक": ['ईन्द्रावती', 'चौतारा साँगाचोकगढी', 'जुगल', 'त्रिपुरासुन्दरी', 'पाँचपोखरी थाङपाल', 'बलेफी', 'बाह्रविसे', 'भोटेकोशी', 'मेलम्ची', 'लिसङ्खु पाखर', 'सुनकोशी', 'हेलम्बु'],
-                                            "बागलुङ": ['काठेखोला', 'गल्कोट', 'जैमूनी', 'ढोरपाटन', 'तमानखोला', 'ताराखोला', 'निसीखोला', 'बागलुङ', 'वडिगाड', 'वरेङ'],
-                                            "गोरखा": ['अजिरकोट', 'आरूघाट', 'गण्डकी', 'गोरखा', 'चुमनुव्री', 'धार्चे', 'पालुङटार', 'बारपाक सुलिकोट', 'भिमसेनथापा', 'शहिद लखन', 'सिरानचोक'],
-                                            "कास्की": ['अन्नपूर्ण', 'पोखरा', 'माछापुच्छ्रे', 'मादी', 'रूपा'],
-                                            "लमजुङ": ['क्व्होलासोथार', 'दूधपोखरी', 'दोर्दी', 'बेसीशहर', 'मध्यनेपाल', 'मर्स्याङदी', 'रारइनास', 'सुन्दरबजार'],
-                                            "मनाङ": ['चामे', 'नार्पा भूमि', 'नासोँ', 'मनाङ ङिस्याङ'],
-                                            "मुस्ताङ": ['घरपझोङ', 'थासाङ', 'लो-घेकर दामोदरकुण्ड', 'लोमन्थाङ', 'वारागुङ मुक्तिक्षेत्र'],
-                                            "म्याग्दी": ['अन्नपुर्ण', 'धवलागिरी', 'बेनी', 'मंगला', 'मालिका', 'रघुगंगा'],
-                                            "नवलपुर": ['कावासोती', 'गैडाकोट', 'देवचुली', 'बुलिङटार', 'बौदीकाली', 'मध्यविन्दु', 'विनयी त्रिवेणी', 'हुप्सेकोट'],
-                                            "पर्वत": ['कुश्मा', 'जलजला', 'पैयूं', 'फलेवास', 'महाशिला', 'मोदी', 'विहादी'],
-                                            "स्याङग्जा": ['अर्जुनचौपारी', 'आँधिखोला', 'कालीगण्डकी', 'गल्याङ', 'चापाकोट', 'पुतलीबजार', 'फेदीखोला', 'बिरुवा', 'भीरकोट', 'वालिङ', 'हरिनास'],
-                                            "तनहुँ": ['आँबुखैरेनी', 'ऋषिङ्ग', 'घिरिङ', 'देवघाट', 'भानु', 'भिमाद', 'म्याग्दे', 'वन्दिपुर', 'व्यास', 'शुक्लागण्डकी'],
-                                            "कपिलवस्तु": ['कपिलवस्तु', 'कृष्णनगर', 'बाणगंगा', 'बुद्धभुमी', 'महाराजगंज', 'मायादेवी', 'यसोधरा', 'विजयनगर', 'शिवराज', 'सुद्धोधन'],
-                                            "परासी": ['पाल्हीनन्दन', 'प्रतापपुर', 'बर्दघाट', 'रामग्राम', 'सरावल', 'सुनवल', 'सुस्ता'],
-                                            "रुपन्देही": ['ओमसतिया', 'कन्चन', 'कोटहीमाई', 'गैडहवा', 'तिलोत्तमा', 'देवदह', 'बुटवल', 'मर्चवारी', 'मायादेवी', 'रोहिणी', 'लुम्बिनी सांस्कृतिक', 'शुद्धोधन', 'सम्मरीमाई', 'सिद्धार्थनगर', 'सियारी', 'सैनामैना'],
-                                            "अर्घाखाँची": ['छत्रदेव', 'पाणिनी', 'भूमिकास्थान', 'मालारानी', 'शितगंगा', 'सन्धिखर्क'],
-                                            "गुल्मी": ['ईस्मा', 'कालीगण्डकी', 'गुल्मी दरबार', 'चन्द्रकोट', 'छत्रकोट', 'धुर्कोट', 'मदाने', 'मालिका', 'मुसिकोट', 'रुरुक्षेत्र', 'रेसुङ्गा', 'सत्यवती'],
-                                            "पाल्पा": ['तानसेन', 'तिनाउ', 'निस्दी', 'पूर्वखोला', 'बगनासकाली', 'माथागढी', 'रम्भा', 'रामपुर', 'रिब्दिकोट', 'रैनादेवी छहरा'],
-                                            "दाङ": ['गढवा', 'घोराही', 'तुल्सीपुर', 'दंगीशरण', 'बंगलाचुली', 'बबई', 'राजपुर', 'राप्ती', 'लमही', 'शान्तिनगर'],
-                                            "प्युठान": ['ऐरावती', 'गौमुखी', 'झिमरुक', 'नौवहिनी', 'प्यूठान', 'मल्लरानी', 'माण्डवी', 'सरुमारानी', 'स्वर्गद्वारी'],
-                                            "रोल्पा": ['गंगादेव', 'त्रिवेणी', 'थवाङ', 'परिवर्तन', 'माडी', 'रुन्टीगढी', 'रोल्पा', 'लुङग्री', 'सुनछहरी', 'सुनिल स्मृति'],
-                                            "पूर्वी रूकुम": ['पुथा उत्तरगंगा', 'भूमे', 'सिस्ने'],
-                                            "बाँके": ['कोहलपुर', 'खजुरा', 'जानकी', 'डुडुवा', 'नरैनापुर', 'नेपालगंज', 'बैजनाथ', 'राप्ती सोनारी'],
-                                            "बर्दिया": ['गुलरिया', 'गेरुवा', 'ठाकुरबाबा', 'बढैयाताल', 'बाँसगढी', 'बारबर्दिया', 'मधुवन', 'राजापुर'],
-                                            "रुकुम पश्चिम": ['आठबिसकोट', 'चौरजहारी', 'त्रिवेणी', 'बाँफिकोट', 'मुसिकोट', 'सानी भेरी'],
-                                            "सल्यान": ['कपुरकोट', 'कालिमाटी', 'कुमाख', 'छत्रेश्वरी', 'त्रिवेणी', 'दार्मा', 'बनगाड कुपिण्डे', 'बागचौर', 'शारदा', 'सिद्ध कुमाख'],
-                                            "डोल्पा": ['काईके', 'छार्का ताङसोङ', 'जगदुल्ला', 'ठूली भेरी', 'डोल्पो बुद्ध', 'त्रिपुरासुन्दरी', 'मुड्केचुला', 'शे फोक्सुन्डो'],
-                                            "हुम्ला": ['अदानचुली', 'खार्पुनाथ', 'चंखेली', 'ताँजाकोट', 'नाम्खा', 'सर्केगाड', 'सिमकोट'],
-                                            "जुम्ला": ['कनकासुन्दरी', 'गुठिचौर', 'चन्दननाथ', 'तातोपानी', 'तिला', 'पातारासी', 'सिंजा', 'हिमा'],
-                                            "कालिकोट": ['खाँडाचक्र', 'तिलागुफा', 'नरहरिनाथ', 'पचालझरना', 'पलाता', 'महावै', 'रास्कोट', 'शुभ कालीका', 'सान्नी त्रिवेणी'],
-                                            "मुगु": ['खत्याड', 'छायाँनाथ रारा', 'मुगुम कार्मारोंग', 'सोरु'],
-                                            "सुर्खेत": ['गुर्भाकोट', 'चिङ्गाड', 'चौकुने', 'पञ्चपुरी', 'बराहताल', 'बीरेन्द्रनगर', 'भेरीगंगा', 'लेकवेशी', 'सिम्ता'],
-                                            "दैलेख": ['आठबीस', 'गुराँस', 'चामुण्डा विन्द्रासैनी', 'ठाँटीकाँध', 'डुंगेश्वर', 'दुल्लु', 'नारायण', 'नौमुले', 'भगवतीमाई', 'भैरवी', 'महावु'],
-                                            "जाजरकोट": ['कुसे', 'छेडागाड', 'जुनीचाँदे', 'नलगाड', 'बारेकोट', 'भेरी', 'शिवालय'],
-                                            "दार्चुला": ['अपिहिमाल', 'दुहुँ', 'नौगाड', 'ब्याँस', 'महाकाली', 'मार्मा', 'मालिकार्जुन', 'लेकम', 'शैल्यशिखर'],
-                                            "बझाङ": ['केदारस्युँ', 'खप्तडछान्ना', 'छबिसपाथिभेरा', 'जयपृथ्वी', 'तलकोट', 'थलारा', 'दुर्गाथली', 'बुंगल', 'मष्टा', 'वित्थडचिर', 'साइपाल', 'सूर्मा'],
-                                            "बाजुरा": ['खप्तड छेडेदह', 'गौमुल', 'जगन्\u200dनाथ', 'त्रिवेणी', 'बडीमालिका', 'बुढीगंगा', 'बुढीनन्दा', 'स्वामीकार्तिक खापर', 'हिमाली'],
-                                            "बैतडी": ['डीलासैनी', 'दशरथचन्द', 'दोगडाकेदार', 'पञ्चेश्वर', 'पाटन', 'पुर्चौडी', 'मेलौली', 'शिवनाथ', 'सिगास', 'सुर्नया'],
-                                            "डोटी": ['आदर्श', 'के.आई.सिं.', 'जोरायल', 'दिपायल सिलगढी', 'पूर्वीचौकी', 'बडीकेदार', 'बोगटान फुड्सिल', 'शिखर', 'सायल'],
-                                            "अछाम": ['कमलबजार', 'चौरपाटी', 'ढकारी', 'तुर्माखाँद', 'पन्चदेवल विनायक', 'बान्निगढी जयगढ', 'मंगलसेन', 'मेल्लेख', 'रामारोशन', 'साँफेबगर'],
-                                            "डडेलधुरा": ['अजयमेरु', 'अमरगढी', 'आलिताल', 'गन्यापधुरा', 'नवदुर्गा', 'परशुराम', 'भागेश्वर'],
-                                            "कञ्चनपुर": ['कृष्णपुर', 'पुर्नवास', 'बेलडाडी', 'बेलौरी', 'भीमदत्त', 'माहाकाली', 'लालझाडी', 'वेदकोट', 'शुक्लाफाँटा'],
-                                            "कैलाली": ['कैलारी', 'गोदावरी', 'गौरीगंगा', 'घोडाघोडी', 'चुरे', 'जानकी', 'जोशीपुर', 'टिकापुर', 'धनगढी', 'बर्दगोरिया', 'भजनी', 'मोहन्याल', 'लम्कीचुहा'],
-
-                                                        // Add other district municipalities here...
-                                                    };
-
-                                                    if (municipalities[selectedDistrict]) {
-                                                        municipalityOptionHTML = municipalities[selectedDistrict].map(municipality => `<option value="${municipality}">${municipality}</option>`).join('');
-                                                    }
-
-                                                    municipalitySelect.innerHTML = `<option value="">Select a  municipality</option>` + municipalityOptionHTML;
-                                                });
-                                            </script>
-
-                                            <!-- Ward Number -->
-                                            <div class="col-12 col-md-4 mb-3">
-                                                <input type="number" name="temporaryAddressWardInput" id="temporaryAddressWardInput" class="form-control" placeholder="Ward Number">
-                                            </div>
-
-                                            <!-- Tole/Address -->
-                                            <div class="col-12 col-md-4 mb-3">
-                                                <input type="text" name="temporaryAddressToleInput" id="temporaryAddressToleInput" class="form-control" placeholder="Tole/Address">
-                                            </div>
-
-                                         </div>
-                                        
-                                     </div>
-
-                                     <div class="col-md-6 col-sm-12 mb-3">
-                                        <label for="bloodgroup">Joined in social media group (multiple selection possible)</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="socialMediaGroup" id="l_g" value="Learning ग्रुप" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="l_g">
-                                                Learning ग्रुप
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="checkbox" name="socialMediaGroup" id="s_m" value="Social Media Group" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="s_m">
-                                                Social Media Group
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="checkbox" name="socialMediaGroup" id="b_o" value="Book Order" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="b_o">
-                                                Book Order
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="checkbox" name="socialMediaGroup" id="t_t" value="Trend Team" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="t_t">
-                                                Trend Team
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="checkbox" name="socialMediaGroup" id="n_s" value="Nepal Special Trend Team" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="n_s">
-                                                Nepal Special Trend Team
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="checkbox" name="socialMediaGroup" id="p_g" value="Platform Group (YouTube, Twitter, Facebook, Instagram, Pinterest)" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom" for="p_g">
-                                                Platform Group (YouTube, Twitter, Facebook, Instagram, Pinterest)
-                                            </label>
-                                        
-                                              
-                                        </div>
-                                        
-                                        
-                                     </div>
-                                     <div class="col-md-6 col-sm-12 mb-3">
-                                        <label for="gender">Social Media Sewa Status</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="social_status" id="adsr" value="Actively Daily Sending Report" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="adsr">
-                                                Actively Daily Sending Report
-                                            </label>
-                                                                            
-                                            <input class="form-check-input" type="radio" name="social_status" id="absdnsr" value="Active but some days not sending report" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="absdnsr">
-                                                Active but some days not sending report
-                                            </label>
-
-                                            <input class="form-check-input" type="radio" name="social_status" id="na" value="Not Active" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom" for="na">
-                                                Not Active
-                                            </label>
-
-                                        </div>
-                                     
-                                     </div>
-
-                                     <div class="col-md-6 col-sm-12 mb-3">
-                                        <label for="bloodgroup">Additional Sewa of district/state social media (multiple selection possible)</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="AdditionalSewa" id="re_ma" value="Report making" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="re_ma">
-                                                Report making
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="checkbox" name="AdditionalSewa" id="so_me" value="Social Media Group" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="so_me">
-                                                Reporting
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="checkbox" name="AdditionalSewa" id="ca_ma" value="Cameraman" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="ca_ma">
-                                                Cameraman
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="checkbox" name="AdditionalSewa" id="other" value="Other" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="other">
-                                                Other
-                                            </label>
-                                        
-                                            <input class="form-check-input" type="checkbox" name="AdditionalSewa" id="a_no" value="No" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="a_no">
-                                                No
-                                            </label>   
-                                        </div>
-                                     </div>
-
-                                     <div class="col-md-6 col-sm-12 mb-3">
-                                        <label for="sms_status">SMS Sewa Status</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="sms_status" id="no_in" value="Not Involved" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="no_in">
-                                                Not Involved
-                                            </label>
-                                                                            
-                                            <input class="form-check-input" type="radio" name="sms_status" id="ac_re" value="Actively Responsing" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="ac_re">
-                                                Actively Responsing
-                                            </label>
-
-                                            <input class="form-check-input" type="radio" name="sms_status" id="ac_bnre" value="Active but not reporting" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom mb-1" for="ac_bnre">
-                                                Active but not reporting
-                                            </label>
-
-                                            <input class="form-check-input" type="radio" name="sms_status" id="no_ac" value="Not Active" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom" for="no_ac">
-                                                Not Active
-                                            </label>
-
-
-
-                                        </div>
-                                     
-                                     </div>
-
-                                     <div class="col-md-6 col-sm-12 mb-3">
-                                        <div class="mb-3">
-                                            <label for="smsSewaGroupInput" class="form-label">Any Joined Group Name of SMS Sewa</label>
-                                            <input type="text" class="form-control" name="smsSewaGroupInput" id="smsSewaGroupInput" placeholder="Enter all the name of the group">
-                                        </div>
-                                     </div>
-
-                                     <div class="col-md-6 col-sm-12 mb-3">
-                                        <div class="mb-3">
-                                            <label for="specialSewaSMSInput" class="form-label">Any Special Sewa in SMS</label>
-                                            <input type="text" class="form-control" name="specialSewaSMSInput" id="specialSewaSMSInput" placeholder="Enter any special Sewa in SMS">
-                                        </div>
-                                     </div>
+                                    <label class="form-label" for="buyerFullName">Buyer Full Name</label>
                                 
-                                     <div class="col-md-6 col-sm-12 mb-3">
-                                        <label for="gender">SMS Calling Sewa?</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="calling_sewa" id="cal_sew_y" value="Yes" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom" for="cal_sew_y">
-                                                Yes
-                                            </label>
-                                                                            
-                                            <input class="form-check-input" type="radio" name="calling_sewa" id="cal_sew_n" value="No" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom" for="cal_sew_n">
-                                                No
-                                            </label>
+                                        <input type="text" class="form-control" id="buyerFullName" name="buyerFullName" placeholder="Enter Buyer Full Name" required 
+                                            data-parsley-minlength="2" 
+                                            data-parsley-maxlength="50"
+                                            data-parsley-pattern="^[A-Za-z ]+$"
+                                            data-parsley-pattern-message="Only letters and spaces allowed.">
+                                    </div>
+                                  
+                                    <!-- Book Selection -->
+                                    <div class="col-md-6 col-sm-12 mb-3">
+                                        <label class="form-label" for="bookSelect">Select Book</label>
+                                        <select class="form-select" id="bookSelect" name="bookSelect" required>
+                                            <option value="">Search and Select a book</option>
+                                        </select>
+                                    </div>
 
+                                    <!-- Address Section -->
+                                    <div class="col-12 mb-3">
+                                        <div class="address-section">
+                                            <h5>Address Details</h5>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12 mb-3">
+                                                    <label class="form-label" for="country">Country</label>
+                                                    <select class="form-select" id="country" name="country" required>
+                                                        <option value="">Select Country</option>
+                                                        <option value="Nepal">Nepal</option>
+                                                        <option value="India">India</option>
+                                                        <option value="other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12 mb-3">
+                                                    <label class="form-label" for="province">Province / State</label>
+                                                    <select class="form-select" id="province" name="province" required>
+                                                        <option value="">Select Province</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12 mb-3">
+                                                    <label class="form-label" for="district">District</label>
+                                                    <select class="form-select" id="district" name="district" required>
+                                                        <option value="">Select District</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12 mb-3">
+                                                    <label class="form-label" for="municipality">Municipality</label>
+                                                    <select class="form-select" id="municipality" name="municipality" required>
+                                                        <option value="">Select Municipality</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label" for="address">City / Village / Street Address</label>
+                                                    <textarea class="form-control" id="address" name="address" rows="2" required></textarea>
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label" for="landmark">Landmark (Optional)</label>
+                                                    <input type="text" class="form-control" id="landmark" name="landmark">
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label" for="postalCode">Postal Code (Optional)</label>
+                                                    <input type="text" class="form-control" id="postalCode" name="postalCode"  pattern="[A-Za-z0-9\- ]{4,10}" data-parsley-pattern="^[A-Za-z0-9\- ]{4,10}$" data-parsley-pattern-message="Enter a valid postal code (4-10 letters/numbers).">
+                                                </div>
+                                            </div>
                                         </div>
-                                     
-                                     </div>
-
-                                     <div class="col-md-6 col-sm-12 mb-3">
-                                        <label for="gender">SMS Feedback Calling Sewa?</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="feedback_calling_sewa" id="f_cal_sew_y" value="Yes" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom" for="f_cal_sew_y">
-                                                Yes
-                                            </label>
-                                                                            
-                                            <input class="form-check-input" type="radio" name="feedback_calling_sewa" id="f_cal_sew_n" value="No" data-parsley-required-message="This field is required." data-parsley-required="true">
-                                            <label class="form-check-label btn-custom" for="f_cal_sew_n">
-                                                No
-                                            </label>
-
-                                        </div>
-                                        
-                                     
-                                     </div>
-
-                                     <div class="col-md-6 col-sm-12 mb-3">
-                                        <div class="mb-3">
-                                            <label for="otherSewaResponsibilityInput" class="form-label">Any other Sewa responsibility?</label>
-                                            <input type="text" class="form-control" name="otherSewaResponsibilityInput" id="otherSewaResponsibilityInput" placeholder="Enter any other Sewa responsibility">
-                                        </div>
-                                     </div>
-
+                                    </div>
                                 </div>
-
                                 <button type="submit" id="submitBtn" class="mt-2 p-12 btn btn-primary w-100">
                                     <span id="btnText">Submit</span>
                                     <span id="btnLoader" class="spinner-border spinner-border-sm" style="display: none;"></span>
@@ -880,134 +855,357 @@ button {
             </div>
         </div>
     </div>
+    <script src="admin/js/jquery.js"></script>
+    <script src="admin/js/pages/parsley.min.js"></script>
+    <script src="admin/vendors/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="admin/vendors/select2/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2 for all select elements
+            $('select').each(function() {
+                var firstOption = $(this).find('option:first');
+                var hasEmpty = firstOption.val() === '';
+                $(this).select2({
+                    placeholder: hasEmpty ? firstOption.text() : undefined,
+                    allowClear: false,
+                    width: '100%'
+                });
+            });
+
+            // Load address data
+            let provincesData = {};
+            let districtsData = {};
+            let municipalitiesData = {};
+
+            // Fetch address data
+            $.getJSON('data/address/Nepal/country_provinces.json', function(data) {
+                provincesData = data;
+            });
+
+            $.getJSON('data/address/Nepal/province_districts.json', function(data) {
+                districtsData = data;
+            });
+
+            $.getJSON('data/address/Nepal/district_municipalities.json', function(data) {
+                municipalitiesData = data;
+            });
+
+            // Country change handler
+            $('#country').change(function() {
+                const country = $(this).val();
+                const provinceSelect = $('#province');
+                const districtSelect = $('#district');
+                const municipalitySelect = $('#municipality');
+
+                // Clear dependent fields
+                provinceSelect.empty().append('<option value="">Select Province</option>');
+                districtSelect.empty().append('<option value="">Select District</option>');
+                municipalitySelect.empty().append('<option value="">Select Municipality</option>');
+
+                if (country && provincesData[country]) {
+                    // Populate provinces
+                    provincesData[country].forEach(function(province) {
+                        provinceSelect.append(`<option value="${province}">${province}</option>`);
+                    });
+                }
+            });
+
+            // Province change handler
+            $('#province').change(function() {
+                const province = $(this).val();
+                const districtSelect = $('#district');
+                const municipalitySelect = $('#municipality');
+
+                // Clear dependent fields
+                districtSelect.empty().append('<option value="">Select District</option>');
+                municipalitySelect.empty().append('<option value="">Select Municipality</option>');
+
+                if (province && districtsData[province]) {
+                    // Populate districts
+                    districtsData[province].forEach(function(district) {
+                        districtSelect.append(`<option value="${district}">${district}</option>`);
+                    });
+                }
+            });
+
+            // District change handler
+            $('#district').change(function() {
+                const district = $(this).val();
+                const municipalitySelect = $('#municipality');
+
+                // Clear municipality field
+                municipalitySelect.empty().append('<option value="">Select Municipality</option>');
+
+                if (district && municipalitiesData[district]) {
+                    // Populate municipalities
+                    municipalitiesData[district].forEach(function(municipality) {
+                        municipalitySelect.append(`<option value="${municipality}">${municipality}</option>`);
+                    });
+                }
+            });
+
+            // Initialize Select2 for book selection with data from books.json
+            $.getJSON('data/books.json', function(data) {
+                var books = data.filter(function(book) {
+                    return book.status === 'Active';
+                });
+                var bookOptions = books.map(function(book) {
+                    return {
+                        id: book.name,
+                        text: book.name,
+                        thumbnail: book.thumbnail
+                    };
+                });
+                $('#bookSelect').select2({
+                    data: [{id: '', text: 'Search and select a book'}].concat(bookOptions),
+                    placeholder: 'Search and select a book',
+                    allowClear: false,
+                    width: '100%',
+                    templateResult: formatBookWithThumb,
+                    templateSelection: formatBookWithThumb
+                });
+            });
+
+            function formatBookWithThumb(state) {
+                if (!state.id) return state.text;
+                var thumb = state.thumbnail || $(state.element).data('thumbnail');
+                if (thumb) {
+                    return $(
+                        `<span style="display:flex;align-items:center;"><img src="${thumb}" width="32" height="32" style="object-fit:cover;border-radius:4px;margin-right:10px;">${state.text}</span>`
+                    );
+                }
+                return state.text;
+            }
+
+            $.getJSON('data/address/Nepal/phone_no.json', function(data) {
+                const $select = $('#countryCode');
+
+                data.forEach(function(country) {
+                    const flagUrl = `https://flagcdn.com/w40/${country.value.toLowerCase()}.png`;
+                    const option = new Option(country.dialCode, country.dialCode, false, false);
+                    $(option).attr('data-flag', flagUrl);
+                    $select.append(option);
+                });
+
+                $select.select2({
+                    templateResult: formatOptionWithFlag,
+                    templateSelection: formatSelectionFlagOnly,
+                    allowHtml: true
+                });
+            });
+
+            function formatOptionWithFlag(state) {
+                if (!state.id) return state.text;
+                const flag = $(state.element).data('flag');
+                const text = state.text;
+                const match = text.match(/^([+\\d]+)\s*\((.*)\)$/);
+                if (match) {
+                    return $(
+                        `<span>
+                            <img src="${flag}" width="22" style="margin-right: 8px;vertical-align:middle;">
+                            <span class="country-code-small">${match[1]}</span>
+                            <span style="margin-left:6px;">(${match[2]})</span>
+                        </span>`
+                    );
+                }
+                return $(`<span><img src="${flag}" width="22" style="margin-right: 8px;vertical-align:middle;"> ${text}</span>`);
+            }
+
+            function formatSelectionFlagOnly(state) {
+                if (!state.id) return state.text;
+                const flag = $(state.element).data('flag');
+                return $(`<span><img src="${flag}" width="22" style="vertical-align:middle;"></span>`);
+            }
+
+            // Format phone number as user types, limit to 10 digits
+            $('#phone').on('input', function() {
+                let value = $(this).val().replace(/\D/g, '').slice(0, 10);
+                $(this).val(value);
+            });
+
+            // Set default checked for Sewa Type: Normal and Payment Type: Free
+            $('#normal').prop('checked', true);
+            $('#free').prop('checked', true);
+
+            // National/International logic
+            $('input[name="orderType"]').change(function() {
+                if ($('#national').is(':checked')) {
+                    // Set country to Nepal and trigger change
+                    $('#country').val('Nepal').trigger('change');
+                    // Wait for provincesData to be loaded, then populate provinces
+                    setTimeout(function() {
+                        const provinceSelect = $('#province');
+                        provinceSelect.empty().append('<option value="">Select Province</option>');
+                        if (provincesData['Nepal']) {
+                            provincesData['Nepal'].forEach(function(province) {
+                                provinceSelect.append(`<option value="${province}">${province}</option>`);
+                            });
+                        }
+                    }, 100);
+                } else {
+                    // Clear country and province
+                    $('#country').val('').trigger('change');
+                    $('#province').empty().append('<option value="">Select Province</option>');
+                }
+            });
+
+            // If National is default, trigger change on load
+            if ($('#national').is(':checked')) {
+                $('#national').trigger('change');
+            }
+
+            $('#myForm').submit(function (e) {
+                e.preventDefault();
+            
+                var submitBtn = $('#submitBtn');
+                var btnText = $('#btnText');
+                var btnLoader = $('#btnLoader');
+
+                // const url = "https://script.google.com/macros/s/AKfycbzKWgZF2C34hO2ml6ol9rDoSSyMrKizEFSVHJF3uhXQ5BCogA65kwSHTPu04KY1GMYYnQ/exec";
+                // const url = "https://script.google.com/macros/s/AKfycbwkikIvP3m8Mb-lramd4--7dmi9tdmyG53Dvcxt0zexln55ZSxT0-y0XFmCQBNmV9C_/exec";
+                const url = "https://script.google.com/macros/s/AKfycbwkikIvP3m8Mb-lramd4--7dmi9tdmyG53Dvcxt0zexln55ZSxT0-y0XFmCQBNmV9C_/exec";
+                
+                var formData = new FormData(this);
+                var timestampPart = Date.now().toString().slice(-6); 
+                var randomString = Math.random().toString(36).substring(2, 6).toUpperCase(); 
+                var orderId = timestampPart + randomString;
+                formData.append('orderId', orderId);
+                formData.append('status', 'Pending');
+
+                var data = {};
+                formData.forEach(function(value, key){
+                    data[key] = value;
+                });
+               
+
+                // Log the request data
+                console.log('Request data:', data);
+         
+
+                // Show loading spinner in button and disable it
+                btnLoader.show();
+                btnText.hide();
+                submitBtn.prop('disabled', true);
+
+                Swal.fire({
+                    title: 'Processing...',
+                    text: 'Please wait while we process your request.',
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Send AJAX request
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        console.log("Success:", response);
+
+                        // Show success message
+                        Swal.fire({
+                            title: 'Success!',
+                            text: `${response.message}`,
+                            icon: 'success'
+                        }).then(() => {
+                            btnLoader.hide();
+                            btnText.show();
+                            submitBtn.prop('disabled', false);
+                            location.reload();
+                           
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", error);
+
+                        // Show error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred while sending the request.',
+                            icon: 'error'
+                        }).then(() => {
+                            btnLoader.hide();
+                            btnText.show();
+                            
+                        });
+                    }
+                });
+            });
+
+            // Add after document ready
+            let ordersCache = [];
+            $.getJSON('data/orders.json', function(data) {
+                ordersCache = data;
+                console.log('Loaded orders:', ordersCache); // Debug
+            });
+
+            $('#phone').on('input', function() {
+                const inputVal = $(this).val().replace(/\D/g, '');
+                if (inputVal.length < 5) {
+                    $('#order-search-results').hide();
+                    return;
+                }
+                const matches = ordersCache.filter(order =>
+                    (order.phoneNumber || order.phoenNumber) &&
+                    ((order.phoneNumber || order.phoenNumber) + '').includes(inputVal)
+                );
+                console.log('Matches:', matches); // Debug
+                if (matches.length > 0) {
+                    let html = matches.map((order, idx) =>
+                        `<div class="phone-search-item" data-idx="${idx}">
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 8px;">
+                                <div style="width: 40px; height: 40px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px; overflow: hidden;">
+                                    <img src="${order.bookOrdered?.thumbnail || ''}" 
+                                         style="max-width: 100%; max-height: 100%; object-fit: contain;"
+                                         onerror="this.src='admin/images/default-book.png'">
+                                </div>
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-weight: 500;">${order.phoenNumber || ''}</div>
+                                    <div style="font-size: 0.9em; margin-bottom: 4px;">${order.buyerFullName || ''}</div>
+                                    <div style="font-size: 0.85em; color: #666;">
+                                        <div>${order.status || ''} - ${order.orderType || ''} - ${order.paymentType || ''}</div>
+                                        <div>${order.address?.district || ''}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
+                    ).join('');
+                    $('#order-search-results').html(html).show();
+                } else {
+                    $('#order-search-results').hide();
+                }
+            });
+
+            $('#order-search-results').on('click', '.phone-search-item', function() {
+                const idx = $(this).data('idx');
+                const order = ordersCache[idx];
+                if (!order) return;
+                $('#buyerFullName').val(order.buyerFullName || '');
+                $('#phone').val(order.phoneNumber || order.phoenNumber || '');
+                $("input[name='paymentType']").filter(`[value='${order.paymentType || ''}']`).prop('checked', true);
+                $("input[name='orderType']").filter(`[value='${order.orderType || ''}']`).prop('checked', true);
+                $("input[name='sewaType']").filter(`[value='${order.sewaType || ''}']`).prop('checked', true);
+                $('#country').val(order.address?.country || '').trigger('change');
+                setTimeout(function() {
+                    $('#province').val(order.address?.province || '').trigger('change');
+                    setTimeout(function() {
+                        $('#district').val(order.address?.district || order.address?.city || '').trigger('change');
+                        setTimeout(function() {
+                            $('#municipality').val(order.address?.municipility || order.address?.municipality || '').trigger('change');
+                        }, 200);
+                    }, 200);
+                }, 200);
+                $('#address').val(order.address?.address || '');
+                $('#landmark').val(order.address?.landmark || '');
+                $('#postalCode').val(order.address?.postalCode || '');
+                if (order.bookOrdered && order.bookOrdered.name) {
+                    $('#bookSelect').val(order.bookOrdered.name).trigger('change');
+                }
+                $('#order-search-results').hide();
+            });
+        });
+    </script>
 </body>
 
 </html>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const inputField = document.getElementById('id_phone');
-
-        inputField.addEventListener('input', function (e) {
-            const value = inputField.value;
-            if (value.length > 10) {
-                inputField.value = value.slice(0, 10);
-            }
-        });
-    });
-</script>
-
-<script src="admin/vendors/choices.js/choices.min.js"></script>
-<script src="admin/js/jquery.js"></script>
-<script src="admin/js/pages/parsley.min.js"></script>
-<script src="admin/vendors/sweetalert2/sweetalert2.all.min.js"></script>
-<script>
-   $(document).ready(function () {
-    $('#myForm').submit(function (e) {
-        e.preventDefault();  // Prevent default form submission
-        
-        var submitBtn = $('#submitBtn');
-        var btnText = $('#btnText');
-        var btnLoader = $('#btnLoader');
-        
-        const url = "https://script.google.com/macros/s/AKfycbzKWgZF2C34hO2ml6ol9rDoSSyMrKizEFSVHJF3uhXQ5BCogA65kwSHTPu04KY1GMYYnQ/exec ";
-        
-        var formData = new FormData(this);
-
-        const socialMediaGroups = Array.from(document.querySelectorAll('input[name="socialMediaGroup"]:checked'))
-            .map(checkbox => checkbox.value)
-            .join(", ");  
-
-        // Get the selected values for 'AdditionalSewa' and join them with commas
-        const additionalSewaDistrictState = Array.from(document.querySelectorAll('input[name="AdditionalSewa"]:checked'))
-            .map(checkbox => checkbox.value)
-            .join(", ");  
-
-            const data = {
-                nameInput: formData.get('nameInput'),
-                phone_number: formData.get('phone_number'),
-                mantraType: formData.get('mantraType'),
-                mantraTakenDate: formData.get('mantraTakenDate'),
-                dob: formData.get('dob'),
-                gender: formData.get('gender'),
-                member_bhagat: formData.get('member_bhagat'),
-                yesanotherBhagat: formData.get('member_bhagat') === "Yes" ? formData.get('yesanotherBhagat') : null,
-                permanentAddressStateInput: formData.get('permanentAddressStateInput'),
-                permanentAddressDistrictInput: formData.get('permanentAddressDistrictInput'),
-                permanentAddressMunicipalityInput: formData.get('permanentAddressMunicipalityInput'),
-                permanentAddressWardInput: formData.get('permanentAddressWardInput'),
-                permanentAddressToleInput: formData.get('permanentAddressToleInput'),
-                temporaryAddressStateInput: formData.get('temporaryAddressStateInput'),
-                temporaryAddressDistrictInput: formData.get('temporaryAddressDistrictInput'),
-                temporaryAddressMunicipalityInput: formData.get('temporaryAddressMunicipalityInput'),
-                temporaryAddressWardInput: formData.get('temporaryAddressWardInput'),
-                temporaryAddressToleInput: formData.get('temporaryAddressToleInput'),
-                bloodgroup: formData.get('bloodgroup'),
-                blood_donation: formData.get('blood_donation'),
-                socialMediaGroups: socialMediaGroups,
-                social_media_sewa_status: formData.get('social_status'),
-                additionalSewaDistrictState: additionalSewaDistrictState,
-                sms_status: formData.get('sms_status'),
-                smsSewaGroupInput: formData.get('smsSewaGroupInput'),
-                specialSewaSMSInput: formData.get('specialSewaSMSInput'),
-                calling_sewa: formData.get('calling_sewa'),
-                feedback_calling_sewa: formData.get('feedback_calling_sewa'),
-                otherSewaResponsibilityInput: formData.get('otherSewaResponsibilityInput')
-            };
-
-
-        console.log(data);
-
-        // Show loading spinner in button and disable it
-        btnLoader.show();
-        btnText.hide();
-        submitBtn.prop('disabled', true);
-
-        // Use SweetAlert2 to show a loading state
-        Swal.fire({
-            title: 'Processing...',
-            text: 'Please wait while we process your request.',
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
-
-        // Send AJAX request
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: JSON.stringify(data),
-            success: function (response) {
-                console.log("Success:", response);
-
-                // Show success message
-                Swal.fire({
-                    title: 'Success!',
-                    text: `${response.message}`,
-                    icon: 'success'
-                }).then(() => {
-                    btnLoader.hide();
-                    btnText.show();
-                    submitBtn.prop('disabled', false);  // Re-enable the button
-                });
-            },
-            error: function (xhr, status, error) {
-                console.error("Error:", error);
-
-                // Show error message
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'An error occurred while sending the request.',
-                    icon: 'error'
-                }).then(() => {
-                    btnLoader.hide();
-                    btnText.show();
-                    submitBtn.prop('disabled', false);  // Re-enable the button
-                });
-            }
-        });
-    });
-});
-
-    
-</script>
