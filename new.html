@@ -639,23 +639,32 @@ button {
                 }
             });
 
-            // Initialize Select2
-            $('#countryCode').select2({
-                placeholder: "Select country code",
-                allowClear: true,
-                width: '120px'
-            });
-
-            // Load country codes from JSON
             $.getJSON('data/address/Nepal/phone_no.json', function(data) {
+                const $select = $('#countryCode');
+
                 data.forEach(function(country) {
-                    $('#countryCode').append(
-                        $('<option></option>')
-                            .val(country.dialCode)
-                            .text(country.dialCode + ' (' + country.label + ')')
-                    );
+                    const flagUrl = `https://flagcdn.com/w40/${country.value.toLowerCase()}.png`;
+                    const option = new Option(country.dialCode, country.dialCode, false, false);
+                    $(option).attr('data-flag', flagUrl);
+                    $select.append(option);
+                });
+
+                $select.select2({
+                    templateResult: formatOptionWithFlag,
+                    templateSelection: formatOptionWithFlag,
+                    allowHtml: true
                 });
             });
+
+
+            function formatOptionWithFlag(state) {
+                if (!state.id) return state.text;  
+                const flag = $(state.element).data('flag');  
+                const text = state.text;  
+                return $(`<span><img src="${flag}" width="22" style="margin-right: 8px;"> ${text}</span>`);
+            }
+
+
 
             // Format phone number as user types
             $('#phone').on('input', function() {
