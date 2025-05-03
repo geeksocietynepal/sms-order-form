@@ -1154,7 +1154,21 @@ select:focus {
                 if (matches.length > 0) {
                     let html = matches.map((order, idx) =>
                         `<div class="phone-search-item" data-idx="${idx}">
-                            <strong>${order.orderId || ''}</strong> - ${order.buyerFullName || ''} - ${order.bookOrdered?.name || ''}
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 8px;">
+                                <div style="width: 40px; height: 40px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px; overflow: hidden;">
+                                    <img src="${order.bookOrdered?.thumbnail || ''}" 
+                                         style="max-width: 100%; max-height: 100%; object-fit: contain;"
+                                         onerror="this.src='admin/images/default-book.png'">
+                                </div>
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-weight: 500;">${order.phoenNumber || ''}</div>
+                                    <div style="font-size: 0.9em; margin-bottom: 4px;">${order.buyerFullName || ''}</div>
+                                    <div style="font-size: 0.85em; color: #666;">
+                                        <div>${order.status || ''} - ${order.orderType || ''} - ${order.paymentType || ''}</div>
+                                        <div>${order.address?.district || ''}</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>`
                     ).join('');
                     $('#order-search-results').html(html).show();
