@@ -1068,8 +1068,8 @@ select:focus {
                 var timestampPart = Date.now().toString().slice(-6); 
                 var randomString = Math.random().toString(36).substring(2, 6).toUpperCase(); 
                 var orderId = timestampPart + randomString;
-                formData.append('OrderID', orderId);
-                formData.append('Status', 'Pending');
+                formData.append('orderId', orderId);
+                formData.append('status', 'Pending');
 
                 var data = {};
                 formData.forEach(function(value, key){
