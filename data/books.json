@@ -1,0 +1,18 @@
+[
+    {
+        "name": "To Kill a Mockingbird",
+        "thumbnail": "https://example.com/thumbnails/to-kill-a-mockingbird.jpg",
+        "status": "available"
+    },
+    {
+        "name": "1984",
+        "thumbnail": "https://example.com/thumbnails/1984.jpg",
+        "status": "checked out"
+    },
+    {
+        "name": "The Great Gatsby",
+        "thumbnail": "https://example.com/thumbnails/great-gatsby.jpg",
+        "status": "available"
+    }
+]
+    
