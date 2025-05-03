@@ -4,14 +4,22 @@
         "thumbnail": "https://www.jagatgururampalji.org/img/publications/gyan-ganga-nepali.webp",
         "status": "Active"
     },
-    {
-        "name": "Jiune Marga Nepali",
-        "thumbnail": "https://www.jagatgururampalji.org/img/publications/jeene-ki-rah-nepali.webp",
-        "status": "Inactive"
-    },
+ 
     {
         "name": "Gita Timro Gyan Amrit Nepali",
         "thumbnail": "https://www.jagatgururampalji.org/img/publications/gtga_nepali.webp",
+        "status": "Active"
+    },
+
+    {
+        "name": "Garima Gita Ki Hindi",
+        "thumbnail": "https://www.jagatgururampalji.org/img/publications/garima-gita-ki.webp",
+        "status": "Inactive"
+    },
+
+    {
+        "name": "Jiune Marga Nepali",
+        "thumbnail": "https://www.jagatgururampalji.org/img/publications/jeene-ki-rah-nepali.webp",
         "status": "Active"
     }
 
