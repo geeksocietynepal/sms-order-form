@@ -518,10 +518,10 @@ select:focus {
                                     <div class="col-md-6 col-sm-12 mb-3">
                                         <label class="form-label" for="orderType">Order Type</label>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="orderType" id="national" value="national" required>
+                                            <input class="form-check-input" type="radio" name="orderType" id="orderTypeNone" value="" checked>
+                                            <input class="form-check-input" type="radio" name="orderType" id="national" value="national">
                                             <label class="btn-custom" for="national">National (Nepal)</label>
-
-                                            <input class="form-check-input" type="radio" name="orderType" id="international" value="international" required>
+                                            <input class="form-check-input" type="radio" name="orderType" id="international" value="international">
                                             <label class="btn-custom" for="international">International</label>
                                         </div>
                                     </div>
@@ -750,16 +750,30 @@ select:focus {
                 var bookOptions = books.map(function(book) {
                     return {
                         id: book.name,
-                        text: book.name
+                        text: book.name,
+                        thumbnail: book.thumbnail
                     };
                 });
                 $('#bookSelect').select2({
                     data: [{id: '', text: 'Search and select a book'}].concat(bookOptions),
                     placeholder: 'Search and select a book',
                     allowClear: false,
-                    width: '100%'
+                    width: '100%',
+                    templateResult: formatBookWithThumb,
+                    templateSelection: formatBookWithThumb
                 });
             });
+
+            function formatBookWithThumb(state) {
+                if (!state.id) return state.text;
+                var thumb = state.thumbnail || $(state.element).data('thumbnail');
+                if (thumb) {
+                    return $(
+                        `<span style="display:flex;align-items:center;"><img src="${thumb}" width="32" height="32" style="object-fit:cover;border-radius:4px;margin-right:10px;">${state.text}</span>`
+                    );
+                }
+                return state.text;
+            }
 
             $.getJSON('data/address/Nepal/phone_no.json', function(data) {
                 const $select = $('#countryCode');
@@ -913,23 +927,28 @@ select:focus {
             });
 
             // Set default checked for Sewa Type: Normal and Payment Type: Free
-            $('#normal').prop('checked', true);
+            // $('#normal').prop('checked', true);
             $('#free').prop('checked', true);
 
             // National/International logic
             $('input[name="orderType"]').change(function() {
                 if ($('#national').is(':checked')) {
-                    // Set country to Nepal
+                    // Set country to Nepal and trigger change
                     $('#country').val('Nepal').trigger('change');
-                    // Set country code to +977 (Nepal)
-                    // Wait for country codes to load
+                    // Wait for provincesData to be loaded, then populate provinces
                     setTimeout(function() {
-                        $('#countryCode').val('+977').trigger('change');
-                    }, 200);
+                        const provinceSelect = $('#province');
+                        provinceSelect.empty().append('<option value="">Select Province</option>');
+                        if (provincesData['Nepal']) {
+                            provincesData['Nepal'].forEach(function(province) {
+                                provinceSelect.append(`<option value="${province}">${province}</option>`);
+                            });
+                        }
+                    }, 100);
                 } else {
-                    // Clear country and country code
+                    // Clear country and province
                     $('#country').val('').trigger('change');
-                    $('#countryCode').val('').trigger('change');
+                    $('#province').empty().append('<option value="">Select Province</option>');
                 }
             });
 
@@ -937,6 +956,57 @@ select:focus {
             if ($('#national').is(':checked')) {
                 $('#national').trigger('change');
             }
+
+            $('#myForm').submit(function (e) {
+                e.preventDefault();
+                var submitBtn = $('#submitBtn');
+                var btnText = $('#btnText');
+                var btnLoader = $('#btnLoader');
+
+                const url = "https://script.google.com/macros/s/AKfycbzKWgZF2C34hO2ml6ol9rDoSSyMrKizEFSVHJF3uhXQ5BCogA65kwSHTPu04KY1GMYYnQ/exec";
+                var formData = new FormData(this);
+                var data = {};
+                formData.forEach(function(value, key){
+                    data[key] = value;
+                });
+
+                // Log the request data
+                console.log('Request data:', data);
+
+                // Show loading spinner in button and disable it
+                btnLoader.show();
+                btnText.hide();
+                submitBtn.prop('disabled', true);
+
+                // Send AJAX request
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        // Log the response
+                        console.log('Response:', response);
+                        btnLoader.hide();
+                        btnText.show();
+                        submitBtn.prop('disabled', false);
+                        alert('Form submitted successfully!');
+                    },
+                    error: function (xhr, status, error) {
+                        // Log the error
+                        console.error('Error:', error);
+                        btnLoader.hide();
+                        btnText.show();
+                        submitBtn.prop('disabled', false);
+                        alert('An error occurred while sending the request.');
+                    }
+                });
+
+                if (!$('input[name="orderType"]:checked').val()) {
+                    alert('Please select an order type.');
+                    e.preventDefault();
+                    return false;
+                }
+            });
         });
     </script>
 </body>
