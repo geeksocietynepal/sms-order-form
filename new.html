@@ -443,6 +443,47 @@ select:focus {
     box-shadow: 0 0 0 2px rgba(70, 28, 160, 0.15);
     outline: none !important;
 }
+
+/* For Select2 rendered text (including flag) */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 1rem;
+}
+
+/* For Select2 dropdown options */
+.select2-results__option {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
+
+/* For native selects */
+.form-select {
+    padding-left: 16px !important;
+    padding-right: 32px !important; /* space for dropdown arrow */
+    font-size: 1rem;
+    min-height: 44px;
+    box-sizing: border-box;
+}
+
+/* For input fields */
+.form-control, #phone {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    font-size: 1rem;
+    min-height: 44px;
+    box-sizing: border-box;
+}
+
+.country-code-small {
+    font-size: 0.85em;
+    color: #888;
+    font-weight: 500;
+    vertical-align: middle;
+}
 </style>
 <body>
     <div class="">
@@ -576,7 +617,10 @@ select:focus {
                                                     <label class="form-label" for="landmark">Landmark (Optional)</label>
                                                     <input type="text" class="form-control" id="landmark" name="landmark">
                                                 </div>
-                                                
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label" for="postalCode">Postal Code</label>
+                                                    <input type="text" class="form-control" id="postalCode" name="postalCode" required pattern="[A-Za-z0-9\- ]{4,10}" data-parsley-pattern="^[A-Za-z0-9\- ]{4,10}$" data-parsley-pattern-message="Enter a valid postal code (4-10 letters/numbers).">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -708,20 +752,33 @@ select:focus {
 
                 $select.select2({
                     templateResult: formatOptionWithFlag,
-                    templateSelection: formatOptionWithFlag,
+                    templateSelection: formatSelectionFlagOnly,
                     allowHtml: true
                 });
             });
 
-
             function formatOptionWithFlag(state) {
-                if (!state.id) return state.text;  
-                const flag = $(state.element).data('flag');  
-                const text = state.text;  
-                return $(`<span><img src="${flag}" width="22" style="margin-right: 8px;"> ${text}</span>`);
+                if (!state.id) return state.text;
+                const flag = $(state.element).data('flag');
+                const text = state.text;
+                const match = text.match(/^([+\\d]+)\s*\((.*)\)$/);
+                if (match) {
+                    return $(
+                        `<span>
+                            <img src="${flag}" width="22" style="margin-right: 8px;vertical-align:middle;">
+                            <span class="country-code-small">${match[1]}</span>
+                            <span style="margin-left:6px;">(${match[2]})</span>
+                        </span>`
+                    );
+                }
+                return $(`<span><img src="${flag}" width="22" style="margin-right: 8px;vertical-align:middle;"> ${text}</span>`);
             }
 
-
+            function formatSelectionFlagOnly(state) {
+                if (!state.id) return state.text;
+                const flag = $(state.element).data('flag');
+                return $(`<span><img src="${flag}" width="22" style="vertical-align:middle;"></span>`);
+            }
 
             // Format phone number as user types, limit to 10 digits
             $('#phone').on('input', function() {
