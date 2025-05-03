@@ -771,6 +771,7 @@ select:focus {
                                             data-parsley-type="number" 
                                             data-parsley-minlength="10" 
                                             data-parsley-maxlength="10">
+                                        <div id="order-search-results" class="phone-search-results"></div>
                                     
                                     <!-- <small class="text-muted">Format: Country Code + Phone Number</small> -->
                                     </div>
@@ -1130,6 +1131,64 @@ select:focus {
                         });
                     }
                 });
+            });
+
+            // Add after document ready
+            let ordersCache = [];
+            $.getJSON('data/orders.json', function(data) {
+                ordersCache = data;
+                console.log('Loaded orders:', ordersCache); // Debug
+            });
+
+            $('#phone').on('input', function() {
+                const inputVal = $(this).val().replace(/\D/g, '');
+                if (inputVal.length < 5) {
+                    $('#order-search-results').hide();
+                    return;
+                }
+                const matches = ordersCache.filter(order =>
+                    (order.phoneNumber || order.phoenNumber) &&
+                    ((order.phoneNumber || order.phoenNumber) + '').includes(inputVal)
+                );
+                console.log('Matches:', matches); // Debug
+                if (matches.length > 0) {
+                    let html = matches.map((order, idx) =>
+                        `<div class="phone-search-item" data-idx="${idx}">
+                            <strong>${order.orderId || ''}</strong> - ${order.buyerFullName || ''} - ${order.bookOrdered?.name || ''}
+                        </div>`
+                    ).join('');
+                    $('#order-search-results').html(html).show();
+                } else {
+                    $('#order-search-results').hide();
+                }
+            });
+
+            $('#order-search-results').on('click', '.phone-search-item', function() {
+                const idx = $(this).data('idx');
+                const order = ordersCache[idx];
+                if (!order) return;
+                $('#buyerFullName').val(order.buyerFullName || '');
+                $('#phone').val(order.phoneNumber || order.phoenNumber || '');
+                $("input[name='paymentType']").filter(`[value='${order.paymentType || ''}']`).prop('checked', true);
+                $("input[name='orderType']").filter(`[value='${order.orderType || ''}']`).prop('checked', true);
+                $("input[name='sewaType']").filter(`[value='${order.sewaType || ''}']`).prop('checked', true);
+                $('#country').val(order.address?.country || '').trigger('change');
+                setTimeout(function() {
+                    $('#province').val(order.address?.province || '').trigger('change');
+                    setTimeout(function() {
+                        $('#district').val(order.address?.district || order.address?.city || '').trigger('change');
+                        setTimeout(function() {
+                            $('#municipality').val(order.address?.municipility || order.address?.municipality || '').trigger('change');
+                        }, 200);
+                    }, 200);
+                }, 200);
+                $('#address').val(order.address?.address || '');
+                $('#landmark').val(order.address?.landmark || '');
+                $('#postalCode').val(order.address?.postalCode || '');
+                if (order.bookOrdered && order.bookOrdered.name) {
+                    $('#bookSelect').val(order.bookOrdered.name).trigger('change');
+                }
+                $('#order-search-results').hide();
             });
         });
     </script>
