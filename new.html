@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="admin/css/pages/parsley.css">
     <link rel="stylesheet" href="admin/css/app.css">
     <link rel="shortcut icon" href="admin/images/favicon.ico">
-    <link rel="stylesheet" href="admin/vendors/choices.js/choices.min.css" />
     <!-- Add Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
@@ -643,6 +642,10 @@ select:focus {
                                         </div>
                                     </div>
                                 </div>
+                                <button type="submit" id="submitBtn" class="mt-2 p-12 btn btn-primary w-100">
+                                    <span id="btnText">Submit</span>
+                                    <span id="btnLoader" class="spinner-border spinner-border-sm" style="display: none;"></span>
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -650,10 +653,10 @@ select:focus {
             </div>
         </div>
     </div>
-
-    <!-- Add required JavaScript libraries -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="admin/js/jquery.js"></script>
+    <script src="admin/js/pages/parsley.min.js"></script>
+    <script src="admin/vendors/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="admin/vendors/select2/select2.min.js"></script>
     <script>
         $(document).ready(function() {
             // Initialize Select2 for all select elements
