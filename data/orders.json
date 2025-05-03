@@ -12,8 +12,9 @@
         "deliveredAt": "2023-10-02",
         "address": {
             "landmark": "Stupa Neri",
-            "address": "Baudha",
+            "city": "Baudha",
             "municipility": "Kathmandu",
+            "district": "Kathmandu",
             "province": "Bagmati",
             "country": "Nepal",
             "postalCode": "44600"
@@ -37,8 +38,9 @@
         "deliveredAt": "null",
         "address": {
             "landmark": "Stupa Neri",
-            "address": "Baudha",
-            "city": "Kathmandu",
+            "city": "Baudha",
+            "municipility": "Kathmandu",
+            "district": "Kathmandu",
             "province": "Bagmati",
             "country": "Nepal",
             "postalCode": "44600"
@@ -47,8 +49,7 @@
                 "name": "Jiune Marga Nepali",
                 "thumbnail": "https://www.jagatgururampalji.org/img/publications/jeene-ki-rah-nepali.webp",
         }
-          
-        
+            
 
     }
 
