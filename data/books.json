@@ -1,18 +1,19 @@
 [
     {
-        "name": "To Kill a Mockingbird",
-        "thumbnail": "https://example.com/thumbnails/to-kill-a-mockingbird.jpg",
-        "status": "available"
+        "name": "Gyan Ganga Nepali",
+        "thumbnail": "https://www.jagatgururampalji.org/img/publications/gyan-ganga-nepali.webp",
+        "status": "Active"
     },
     {
-        "name": "1984",
-        "thumbnail": "https://example.com/thumbnails/1984.jpg",
-        "status": "checked out"
+        "name": "Jiune Marga Nepali",
+        "thumbnail": "https://www.jagatgururampalji.org/img/publications/jeene-ki-rah-nepali.webp",
+        "status": "Inactive"
     },
     {
-        "name": "The Great Gatsby",
-        "thumbnail": "https://example.com/thumbnails/great-gatsby.jpg",
-        "status": "available"
+        "name": "Gita Timro Gyan Amrit Nepali",
+        "thumbnail": "https://www.jagatgururampalji.org/img/publications/gtga_nepali.webp",
+        "status": "Active"
     }
+
 ]
     
