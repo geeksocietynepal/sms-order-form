@@ -15,12 +15,13 @@
         "address": {
             "landmark": "Stupa Neri",
             "city": "Baudha",
-            "municipility": "Kathmandu",
-            "district": "Kathmandu",
-            "province": "Bagmati",
+            "address": "Baudha",
             "country": "Nepal",
-            "postalCode": "44600",
-            "district": "Kathmandu"
+            "province": "Bagmati",
+            "district": "Kathmandu",
+            "municipility": "Kathmandu",
+            "postalCode": "44600"
+           
         },
         "bookOrdered": {
             "name": "Jiune Marga Nepali",
@@ -40,14 +41,14 @@
         "createdAt": "2023-10-01",
         "deliveredAt": "null",
         "address": {
-            "landmark": "Stupa Neriss",
+            "landmark": "Stupa Neri",
+            "city": "Baudha",
             "address": "Baudha",
-            "city": "Kathmandu",
-            "province": "Bagmati",
             "country": "Nepal",
-            "postalCode": "44600",
+            "province": "Bagmati",
+            "district": "Kathmandu",
             "municipility": "Kathmandu",
-            "district": "Kathmandu"
+            "postalCode": "44600"
         },
         "bookOrdered": {
                 "name": "Jiune Marga Nepali",
