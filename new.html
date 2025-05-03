@@ -1024,7 +1024,6 @@ select:focus {
                 $(this).val(value);
             });
 
-            
             // Set default checked for Sewa Type: Normal and Payment Type: Free
             // $('#normal').prop('checked', true);
             $('#free').prop('checked', true);
@@ -1072,10 +1071,20 @@ select:focus {
                 // Log the request data
                 console.log('Request data:', data);
 
+         
+
                 // Show loading spinner in button and disable it
                 btnLoader.show();
                 btnText.hide();
                 submitBtn.prop('disabled', true);
+
+                Swal.fire({
+                    title: 'Processing...',
+                    text: 'Please wait while we process your request.',
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
 
                 // Send AJAX request
                 $.ajax({
@@ -1093,7 +1102,8 @@ select:focus {
                         }).then(() => {
                             btnLoader.hide();
                             btnText.show();
-                            location.reload(); 
+                            submitBtn.prop('disabled', false);
+                            location.reload();
                            
                         });
                     },
@@ -1108,7 +1118,6 @@ select:focus {
                         }).then(() => {
                             btnLoader.hide();
                             btnText.show();
-                            location.reload(); 
                             
                         });
                     }
