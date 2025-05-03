@@ -742,10 +742,10 @@ select:focus {
                                     <div class="col-md-6 col-sm-12 mb-3">
                                         <label class="form-label" for="sewaType">Sewa Type</label>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="sewaType" id="normal" value="normal" required>
+                                            <input class="form-check-input" type="radio" name="sewaType" id="normal" value="Normal" required>
                                             <label class="btn-custom" for="normal">Normal</label>
 
-                                            <input class="form-check-input" type="radio" name="sewaType" id="urgent" value="urgent" required>
+                                            <input class="form-check-input" type="radio" name="sewaType" id="urgent" value="Urgent" required>
                                             <label class="btn-custom" for="urgent">Urgent</label>
                                         </div>
                                     </div>
@@ -755,10 +755,10 @@ select:focus {
                                     <div class="col-md-6 col-sm-12 mb-3">
                                         <label class="form-label" for="paymentType">Payment Type</label>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="paymentType" id="free" value="free" required>
+                                            <input class="form-check-input" type="radio" name="paymentType" id="free" value="Free" required>
                                             <label class="btn-custom" for="free">Free</label>
 
-                                            <input class="form-check-input" type="radio" name="paymentType" id="paid" value="paid" required>
+                                            <input class="form-check-input" type="radio" name="paymentType" id="paid" value="Paid" required>
                                             <label class="btn-custom" for="paid">Paid</label>
                                         </div>
                                     </div>
@@ -786,9 +786,7 @@ select:focus {
                                             data-parsley-pattern="^[A-Za-z ]+$"
                                             data-parsley-pattern-message="Only letters and spaces allowed.">
                                     </div>
-                                    <!-- <small class="text-muted">Format: Country Code + Phone Number</small> -->
-                                    </div>
-
+                                  
                                     <!-- Book Selection -->
                                     <div class="col-md-6 col-sm-12 mb-3">
                                         <label class="form-label" for="bookSelect">Select Book</label>
@@ -839,7 +837,7 @@ select:focus {
                                                 </div>
                                                 <div class="col-12 mb-3">
                                                     <label class="form-label" for="postalCode">Postal Code (Optional)</label>
-                                                    <input type="text" class="form-control" id="postalCode" name="postalCode" required pattern="[A-Za-z0-9\- ]{4,10}" data-parsley-pattern="^[A-Za-z0-9\- ]{4,10}$" data-parsley-pattern-message="Enter a valid postal code (4-10 letters/numbers).">
+                                                    <input type="text" class="form-control" id="postalCode" name="postalCode"  pattern="[A-Za-z0-9\- ]{4,10}" data-parsley-pattern="^[A-Za-z0-9\- ]{4,10}$" data-parsley-pattern-message="Enter a valid postal code (4-10 letters/numbers).">
                                                 </div>
                                             </div>
                                         </div>
@@ -1024,9 +1022,8 @@ select:focus {
                 $(this).val(value);
             });
 
-            
             // Set default checked for Sewa Type: Normal and Payment Type: Free
-            // $('#normal').prop('checked', true);
+            $('#normal').prop('checked', true);
             $('#free').prop('checked', true);
 
             // National/International logic
@@ -1073,11 +1070,20 @@ select:focus {
 
                 // Log the request data
                 console.log('Request data:', data);
+         
 
                 // Show loading spinner in button and disable it
                 btnLoader.show();
                 btnText.hide();
                 submitBtn.prop('disabled', true);
+
+                Swal.fire({
+                    title: 'Processing...',
+                    text: 'Please wait while we process your request.',
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
 
                 // Send AJAX request
                 $.ajax({
@@ -1095,7 +1101,8 @@ select:focus {
                         }).then(() => {
                             btnLoader.hide();
                             btnText.show();
-                            location.reload(); 
+                            submitBtn.prop('disabled', false);
+                            location.reload();
                            
                         });
                     },
@@ -1110,7 +1117,6 @@ select:focus {
                         }).then(() => {
                             btnLoader.hide();
                             btnText.show();
-                            location.reload(); 
                             
                         });
                     }
