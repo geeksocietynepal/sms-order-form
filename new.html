@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <title>Sewadar Entry Form</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- base:css -->
+    <link rel="stylesheet" href="admin/vendors/typicons.font/font/typicons.css">
+    <link rel="stylesheet" href="admin/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="admin/css/bootstrap.css">
+    <link rel="stylesheet" href="admin/css/pages/parsley.css">
+    <link rel="stylesheet" href="admin/css/app.css">
+    <link rel="shortcut icon" href="admin/images/favicon.ico">
+    <link rel="stylesheet" href="admin/vendors/choices.js/choices.min.css" />
+    <!-- Add Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+<style>
+/* Prevent horizontal scrolling */
+html, body {
+    height: 100%; 
+    margin: 0;    
+    overflow-x: hidden; 
+    overflow-y: auto;  
+}
+
+/* Set the background image area */
+div[style*="background-image"] {
+    background-size: cover;
+    width: 100%;
+    height: 55vh; 
+    overflow: hidden; 
+}
+
+/* Ensure the card doesn't overflow */
+.card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures it takes full screen height */
+}
+
+/* Prevent overflowing form content */
+form {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+    overflow-y: auto; 
+}
+
+/* Make form elements responsive */
+input, select, textarea {
+    width: 100%;
+    box-sizing: border-box; 
+}
+
+img, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+button {
+    width: 100%;
+}
+
+.card-body {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+}
+     
+.form-check-input {
+    display: none;
+}
+
+.btn-custom {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #461ca0;
+    color: white;
+    border: 1px solid #2a1061;
+    border-radius: 25px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    min-width: 120px;
+}
+
+.form-check-input:checked + .btn-custom {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-custom:hover {
+    background-color: #56369b;
+    border-color: #56369b;
+}
+
+.form-check-input:focus + .btn-custom {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(2, 33, 66, 0.25);
+}
+
+.form-control, .form-select {
+    border-radius: 25px;
+    padding: 12px 20px;
+    border: 1px solid #ced4da;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    color: #495057;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #461ca0;
+    box-shadow: 0 0 0 0.2rem rgba(70, 28, 160, 0.15);
+}
+
+.address-section {
+    background-color: #f8f9fa;
+    padding: 24px;
+    border-radius: 15px;
+    margin-bottom: 24px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.address-section h5 {
+    color: #461ca0;
+    margin-bottom: 24px;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.phone-search-results {
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    display: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+}
+
+.phone-search-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.phone-search-item:hover {
+    background-color: #f8f9fa;
+}
+
+.select2-container--default .select2-selection--single {
+    min-height: 48px !important;
+    height: 48px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    font-size: 1rem !important;
+    box-sizing: border-box !important;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    line-height: 48px !important;
+    padding-left: 0 !important;
+    padding-right: 30px !important;
+    font-size: 1rem !important;
+    display: flex;
+    align-items: center;
+    height: 48px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    right: 12px !important;
+}
+
+.input-group .form-control {
+    height: 48px !important;
+    font-size: 1rem !important;
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .select2-container--default .select2-selection--single,
+    .input-group .form-control {
+        min-height: 44px !important;
+        height: 44px !important;
+        font-size: 1rem !important;
+    }
+    .select2-container .select2-selection--single .select2-selection__rendered {
+        line-height: 44px !important;
+        height: 44px !important;
+    }
+}
+
+.select2-dropdown {
+    border-radius: 15px;
+    border: 1px solid #ced4da;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #461ca0;
+    color: white;
+}
+
+.select2-container--default .select2-results__option {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #461ca0;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.form-text {
+    color: #6c757d;
+    font-size: 0.85rem;
+    margin-top: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .btn-custom {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 8px;
+    }
+    
+    .form-check {
+        flex-direction: column;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    .input-group .form-select {
+        border-right: none;
+        border-bottom: 1px solid #ced4da;
+        width: 100%;
+    }
+
+    .input-group .form-control {
+        width: 100%;
+    }
+}
+
+/* Add these styles to the existing <style> section */
+.input-group {
+    display: flex;
+    align-items: stretch;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 2px solid #d1cbe9;
+    background: #fff;
+}
+
+.input-group .form-select,
+.input-group .form-control {
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    height: 48px;
+    padding: 12px 20px;
+    background: transparent;
+}
+
+.input-group .form-select {
+    min-width: 140px;
+    border-right: 1px solid #e0d8f6 !important;
+    border-top-left-radius: 25px !important;
+    border-bottom-left-radius: 25px !important;
+}
+
+.input-group .form-control {
+    border-top-right-radius: 25px !important;
+    border-bottom-right-radius: 25px !important;
+}
+
+/* Select2 integration for input group */
+.select2-container--default .select2-selection--single {
+    border: none !important;
+    border-right: 1px solid #e0d8f6 !important;
+    border-top-left-radius: 25px !important;
+    border-bottom-left-radius: 25px !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    height: 48px !important;
+    padding: 12px 20px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    display: flex;
+    align-items: center;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 1.5 !important;
+    color: #495057;
+    padding-left: 0 !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100% !important;
+    right: 12px !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--single {
+    box-shadow: none !important;
+}
+
+.input-group:focus-within {
+    border-color: #461ca0;
+    box-shadow: 0 0 0 0.2rem rgba(70, 28, 160, 0.10);
+}
+
+@media (max-width: 768px) {
+    .input-group {
+        flex-direction: column;
+        border-radius: 20px;
+    }
+    .input-group .form-select,
+    .input-group .form-control,
+    .select2-container--default .select2-selection--single {
+        border-radius: 0 !important;
+        border-right: none !important;
+        border-bottom: 1px solid #e0d8f6 !important;
+        min-width: 100%;
+        height: 44px !important;
+    }
+    .input-group .form-select {
+        border-top-left-radius: 20px !important;
+        border-top-right-radius: 20px !important;
+        border-bottom-left-radius: 0 !important;
+    }
+    .input-group .form-control {
+        border-bottom-left-radius: 20px !important;
+        border-bottom-right-radius: 20px !important;
+        border-top-right-radius: 0 !important;
+    }
+}
+</style>
+<body>
+    <div class="">
+        <div class="">
+            <div class="card badge-gray-100">
+                <div class="row">
+                    <div style="background-image: url('admin/images/guruji_cover.jpg'); background-size: cover; ">
+                        <div class="card-body p-20" style="height: 100%; display: flex; justify-content: center; align-items: center;">
+                            <div id="carouselExampleCaptions" class="lide text-center widget-carousel" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <div class="text-center p-1">
+                                            <i class="mdi mdi-bitcoin widget-box-1-icon"></i>
+                                            <div class="avatar-md m-auto">
+                                                <span class="avatar-title rounded-circle bg-light-subtle text-white font-size-24">
+                                                    <i class="mdi mdi-currency-btc"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center ">
+                    <div class="col-lg-10 col-md-10 col-sm-12">
+                        <div class="p-4 p-md-5">
+                            <form method="POST" data-parsley-validate id="myForm">
+                                <div class="row">
+                                    <!-- Order Type -->
+                                    <div class="col-md-6 col-sm-12 mb-3">
+                                        <label class="form-label" for="orderType">Order Type</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="orderType" id="national" value="national" required>
+                                            <label class="btn-custom" for="national">National (Nepal)</label>
+
+                                            <input class="form-check-input" type="radio" name="orderType" id="international" value="international" required>
+                                            <label class="btn-custom" for="international">International</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Sewa Type -->
+                                    <div class="col-md-6 col-sm-12 mb-3">
+                                        <label class="form-label" for="sewaType">Sewa Type</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="sewaType" id="normal" value="normal" required>
+                                            <label class="btn-custom" for="normal">Normal</label>
+
+                                            <input class="form-check-input" type="radio" name="sewaType" id="urgent" value="urgent" required>
+                                            <label class="btn-custom" for="urgent">Urgent</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Phone Number -->
+                                    <div class="col-md-6 col-sm-12 mb-3">
+                                        <label class="form-label" for="phone">Phone Number</label>
+                                        <div class="input-group">
+                                            <select class="form-select" id="countryCode" style="width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                                <option value="">Select Code</option>
+                                            </select>
+                                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter phone number" required 
+                                                data-parsley-type="number" 
+                                                data-parsley-minlength="10" 
+                                                data-parsley-maxlength="15"
+                                                style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                                        </div>
+                                        <small class="text-muted">Format: Country Code + Phone Number</small>
+                                    </div>
+
+                                    <!-- Payment Type -->
+                                    <div class="col-md-6 col-sm-12 mb-3">
+                                        <label class="form-label" for="paymentType">Payment Type</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="paymentType" id="free" value="free" required>
+                                            <label class="btn-custom" for="free">Free</label>
+
+                                            <input class="form-check-input" type="radio" name="paymentType" id="paid" value="paid" required>
+                                            <label class="btn-custom" for="paid">Paid</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Book Selection -->
+                                    <div class="col-md-6 col-sm-12 mb-3">
+                                        <label class="form-label" for="bookSelect">Select Book</label>
+                                        <select class="form-select" id="bookSelect" name="bookSelect" required>
+                                            <option value="">Search and select a book</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Address Section -->
+                                    <div class="col-12 mb-3">
+                                        <div class="address-section">
+                                            <h5>Address Details</h5>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12 mb-3">
+                                                    <label class="form-label" for="country">Country</label>
+                                                    <select class="form-select" id="country" name="country" required>
+                                                        <option value="">Select Country</option>
+                                                        <option value="Nepal">Nepal</option>
+                                                        <option value="India">India</option>
+                                                        <option value="other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12 mb-3">
+                                                    <label class="form-label" for="province">Province</label>
+                                                    <select class="form-select" id="province" name="province" required>
+                                                        <option value="">Select Province</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12 mb-3">
+                                                    <label class="form-label" for="district">District</label>
+                                                    <select class="form-select" id="district" name="district" required>
+                                                        <option value="">Select District</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12 mb-3">
+                                                    <label class="form-label" for="municipality">Municipality</label>
+                                                    <select class="form-select" id="municipality" name="municipality" required>
+                                                        <option value="">Select Municipality</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label" for="address">Address</label>
+                                                    <textarea class="form-control" id="address" name="address" rows="2" required></textarea>
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label" for="landmark">Landmark (Optional)</label>
+                                                    <input type="text" class="form-control" id="landmark" name="landmark">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add required JavaScript libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Load address data
+            let provincesData = {};
+            let districtsData = {};
+            let municipalitiesData = {};
+
+            // Fetch address data
+            $.getJSON('data/address/Nepal/country_provinces.json', function(data) {
+                provincesData = data;
+            });
+
+            $.getJSON('data/address/Nepal/province_districts.json', function(data) {
+                districtsData = data;
+            });
+
+            $.getJSON('data/address/Nepal/district_municipalities.json', function(data) {
+                municipalitiesData = data;
+            });
+
+            // Country change handler
+            $('#country').change(function() {
+                const country = $(this).val();
+                const provinceSelect = $('#province');
+                const districtSelect = $('#district');
+                const municipalitySelect = $('#municipality');
+
+                // Clear dependent fields
+                provinceSelect.empty().append('<option value="">Select Province</option>');
+                districtSelect.empty().append('<option value="">Select District</option>');
+                municipalitySelect.empty().append('<option value="">Select Municipality</option>');
+
+                if (country && provincesData[country]) {
+                    // Populate provinces
+                    provincesData[country].forEach(function(province) {
+                        provinceSelect.append(`<option value="${province}">${province}</option>`);
+                    });
+                }
+            });
+
+            // Province change handler
+            $('#province').change(function() {
+                const province = $(this).val();
+                const districtSelect = $('#district');
+                const municipalitySelect = $('#municipality');
+
+                // Clear dependent fields
+                districtSelect.empty().append('<option value="">Select District</option>');
+                municipalitySelect.empty().append('<option value="">Select Municipality</option>');
+
+                if (province && districtsData[province]) {
+                    // Populate districts
+                    districtsData[province].forEach(function(district) {
+                        districtSelect.append(`<option value="${district}">${district}</option>`);
+                    });
+                }
+            });
+
+            // District change handler
+            $('#district').change(function() {
+                const district = $(this).val();
+                const municipalitySelect = $('#municipality');
+
+                // Clear municipality field
+                municipalitySelect.empty().append('<option value="">Select Municipality</option>');
+
+                if (district && municipalitiesData[district]) {
+                    // Populate municipalities
+                    municipalitiesData[district].forEach(function(municipality) {
+                        municipalitySelect.append(`<option value="${municipality}">${municipality}</option>`);
+                    });
+                }
+            });
+
+            // Initialize Select2 for book selection
+            $('#bookSelect').select2({
+                placeholder: 'Search and select a book',
+                allowClear: true,
+                ajax: {
+                    url: '/api/books/search',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            q: params.term
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
+            });
+
+            // Initialize Select2
+            $('#countryCode').select2({
+                placeholder: "Select country code",
+                allowClear: true,
+                width: '120px'
+            });
+
+            // Load country codes from JSON
+            $.getJSON('data/address/Nepal/phone_no.json', function(data) {
+                data.forEach(function(country) {
+                    $('#countryCode').append(
+                        $('<option></option>')
+                            .val(country.dialCode)
+                            .text(country.dialCode + ' (' + country.label + ')')
+                    );
+                });
+            });
+
+            // Format phone number as user types
+            $('#phone').on('input', function() {
+                let value = $(this).val().replace(/\D/g, '');
+                if (value.length > 0) {
+                    value = value.match(new RegExp('.{1,4}', 'g')).join(' ');
+                }
+                $(this).val(value);
+            });
+
+            // Validate phone number format
+            $('#myForm').on('submit', function(e) {
+                let countryCode = $('#countryCode').val();
+                let phoneNumber = $('#phone').val().replace(/\s/g, '');
+                
+                if (!countryCode) {
+                    e.preventDefault();
+                    alert('Please select a country code');
+                    return false;
+                }
+                
+                if (phoneNumber.length < 10) {
+                    e.preventDefault();
+                    alert('Please enter a valid phone number');
+                    return false;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
