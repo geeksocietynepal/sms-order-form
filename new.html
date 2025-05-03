@@ -713,7 +713,7 @@ select:focus {
                             <form method="POST" data-parsley-validate id="myForm">
                                 <div class="row">
                                     <!-- Order Type -->
-                                    <div class="col-md-6 col-sm-12 mb-3">
+                                    <div class="col-md-12  mb-3">
                                         <label class="form-label" for="orderType">Order Type</label>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="orderType" id="orderTypeNone" value="" checked>
@@ -736,24 +736,7 @@ select:focus {
                                         </div>
                                     </div>
 
-                                    <!-- Phone Number -->
-                                    <div class="col-md-6 col-sm-12 mb-3">
-                                        <label class="form-label" for="phone">Phone Number</label>
-                                        <div class="input-group">
-                                            <!-- <select class="form-select" id="countryCode" style="width: 145px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
-                                                <option value="" disabled>Select Code</option>
-                                            </select> -->
-                                            <!-- <select class="form-select" id="countryCode" style="width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
-                                                <option value="">Select Code</option>
-                                            </select> -->
-                                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter phone number" required 
-                                                data-parsley-type="number" 
-                                                data-parsley-minlength="10" 
-                                                data-parsley-maxlength="10">
-                                        </div>
-                                        <!-- <small class="text-muted">Format: Country Code + Phone Number</small> -->
-                                    </div>
-
+                  
                                     <!-- Payment Type -->
                                     <div class="col-md-6 col-sm-12 mb-3">
                                         <label class="form-label" for="paymentType">Payment Type</label>
@@ -766,18 +749,30 @@ select:focus {
                                         </div>
                                     </div>
 
+                                    <!-- Phone Number -->
+                                    <div class="col-md-12 col-sm-12 mb-3">
+                                    <label class="form-label" for="phone">Phone Number</label>
+                    
+                                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter phone number" required 
+                                            data-parsley-type="number" 
+                                            data-parsley-minlength="10" 
+                                            data-parsley-maxlength="10">
+                                    
+                                    <!-- <small class="text-muted">Format: Country Code + Phone Number</small> -->
+                                    </div>
+                
+
                                     <!-- Buyer Name -->
                                     <div class="col-md-6 col-sm-12 mb-3">
                                     <label class="form-label" for="buyerFullName">Buyer Full Name</label>
-                                    <div class="input-group">
-                                   
+                                
                                         <input type="text" class="form-control" id="buyerFullName" name="buyerFullName" placeholder="Enter Buyer Full Name" required 
                                             data-parsley-type="string" 
                                             data-parsley-minlength="20" 
                                             data-parsley-maxlength="20">
-                                    </div>
+                               
                                     <!-- <small class="text-muted">Format: Country Code + Phone Number</small> -->
-                                </div>
+                                    </div>
 
                                     <!-- Book Selection -->
                                     <div class="col-md-6 col-sm-12 mb-3">
