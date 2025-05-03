@@ -31,8 +31,26 @@ html, body {
 div[style*="background-image"] {
     background-size: cover;
     width: 100%;
-    height: 55vh; 
-    overflow: hidden; 
+    height: 55vh;
+    overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+    div[style*="background-image"] {
+        height: 35vh;
+    }
+}
+
+@media (max-width: 768px) {
+    div[style*="background-image"] {
+        height: 25.3vh;
+    }
+}
+
+@media (max-width: 480px) {
+    div[style*="background-image"] {
+        height: 18vh;
+    }
 }
 
 /* Ensure the card doesn't overflow */
@@ -211,6 +229,13 @@ button {
         line-height: 44px !important;
         height: 44px !important;
     }
+    img, .responsive-img {
+        width: 100% !important;
+        height: auto !important;
+        max-width: 100% !important;
+        display: block;
+        object-fit: cover;
+    }
 }
 
 .select2-dropdown {
@@ -272,96 +297,61 @@ button {
 
 /* Add these styles to the existing <style> section */
 .input-group {
-    display: flex;
+    display: flex !important;
+    flex-direction: row !important;
     align-items: stretch;
-    border-radius: 25px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    border: 2px solid #d1cbe9;
-    background: #fff;
 }
 
-.input-group .form-select,
+.input-group .select2-container {
+    min-width: 120px !important;
+    width: 120px !important;
+    flex: 0 0 120px !important;
+}
+
+.input-group .form-control {
+    flex: 1 1 0% !important;
+    width: auto !important;
+}
+
 .input-group .form-control {
     border: none !important;
     border-radius: 0 !important;
-    box-shadow: none !important;
-    height: 48px;
-    padding: 12px 20px;
-    background: transparent;
-}
-
-.input-group .form-select {
-    min-width: 140px;
-    border-right: 1px solid #e0d8f6 !important;
-    border-top-left-radius: 25px !important;
-    border-bottom-left-radius: 25px !important;
-}
-
-.input-group .form-control {
     border-top-right-radius: 25px !important;
     border-bottom-right-radius: 25px !important;
-}
-
-/* Select2 integration for input group */
-.select2-container--default .select2-selection--single {
-    border: none !important;
-    border-right: 1px solid #e0d8f6 !important;
-    border-top-left-radius: 25px !important;
-    border-bottom-left-radius: 25px !important;
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
+    background: transparent;
     height: 48px !important;
-    padding: 12px 20px !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    display: flex;
-    align-items: center;
+    font-size: 1rem !important;
+    padding-left: 18px;
 }
 
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    line-height: 1.5 !important;
-    color: #495057;
-    padding-left: 0 !important;
-}
-
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-    height: 100% !important;
-    right: 12px !important;
-}
-
-.select2-container--default.select2-container--focus .select2-selection--single {
-    box-shadow: none !important;
-}
-
-.input-group:focus-within {
-    border-color: #461ca0;
-    box-shadow: 0 0 0 0.2rem rgba(70, 28, 160, 0.10);
+.select2-container--default .select2-selection--single .select2-selection__clear {
+    display: none !important;
 }
 
 @media (max-width: 768px) {
     .input-group {
-        flex-direction: column;
+        /* flex-direction: column; */
         border-radius: 20px;
+        flex-direction: row !important;
     }
-    .input-group .form-select,
-    .input-group .form-control,
-    .select2-container--default .select2-selection--single {
-        border-radius: 0 !important;
-        border-right: none !important;
-        border-bottom: 1px solid #e0d8f6 !important;
-        min-width: 100%;
-        height: 44px !important;
-    }
-    .input-group .form-select {
+    .input-group .select2-container--default .select2-selection--single {
+        min-width: 120px !important;
+        width: 120px !important;
         border-top-left-radius: 20px !important;
-        border-top-right-radius: 20px !important;
-        border-bottom-left-radius: 0 !important;
+        border-bottom-left-radius: 20px !important;
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        height: 44px !important;
+        font-size: 1rem !important;
     }
     .input-group .form-control {
-        border-bottom-left-radius: 20px !important;
+        width: 100% !important;
+        border-bottom-left-radius: 0 !important;
+        border-top-right-radius: 20px !important;
         border-bottom-right-radius: 20px !important;
-        border-top-right-radius: 0 !important;
+        border-top-left-radius: 0 !important;
+        height: 44px !important;
+        font-size: 1rem !important;
     }
 }
 
@@ -385,6 +375,73 @@ button {
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     padding-right: 48px !important; /* Make space for the clear button */
     text-align: left !important;
+}
+
+#phone {
+    border: 1px solid #7c3aed !important; 
+    position: relative;        /* Softer purple */
+    /* border-left: none !important;                 Assume part of input group */
+    border-top-right-radius: 5px !important;      /* Rounded corners on the right */
+    border-bottom-right-radius: 5px !important;
+    border-top-left-radius: 0 !important;         /* Flat corners on the left */
+    border-bottom-left-radius: 0 !important;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08); /* Subtle shadow */
+    transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s; /* Added background transition */
+    background: #fafaff !important;
+    padding: 0.5rem 0.75rem; /* Added padding for better text spacing */
+    font-size: 1rem; /* Ensure consistent font size */
+    line-height: 1.5; /* Ensure consistent line height */
+    color: #495057; /* Standard input text color */
+    /* Ensure it takes available space within the input group if needed */
+    /* flex-grow: 1; */ /* Uncomment if needed based on parent display */
+    /* width: auto; */ /* Uncomment if needed based on parent display */
+}
+
+/* Enhanced hover state */
+#phone:hover {
+    border-color: #6d28d9 !important; /* Slightly darker purple on hover */
+}
+
+/* Enhanced focus state - align with select focus */
+#phone:focus {
+    border-color: #461ca0 !important;             /* Deeper purple on focus */
+    box-shadow: 0 0 0 2px rgba(70, 28, 160, 0.15); /* Match select focus shadow */
+    outline: none !important;                     /* Remove default outline */
+    background-color: #fff !important;            /* Brighter background on focus */
+    /* z-index: 3; Ensure focus state appears above adjacent elements */
+}
+
+/* Style placeholder */
+#phone::placeholder {
+    color: #adb5bd;
+    opacity: 1; /* Firefox */
+}
+
+#phone:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: #adb5bd;
+}
+
+.select2-selection .select2-selection--single {
+    border: none !important;
+}
+
+#phone::-ms-input-placeholder { /* Microsoft Edge */
+   color: #adb5bd;
+}
+/* Add border to select fields and Select2 */
+select, .select2-container--default .select2-selection--single {
+    border: 1px solid #7c3aed !important;         /* Softer purple */
+    border-radius: 5px !important;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08); /* Subtle shadow */
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background: #fafaff !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--single,
+select:focus {
+    border-color: #461ca0 !important;             /* Deeper purple on focus */
+    box-shadow: 0 0 0 2px rgba(70, 28, 160, 0.15);
+    outline: none !important;
 }
 </style>
 <body>
@@ -448,12 +505,15 @@ button {
                                             <select class="form-select" id="countryCode" style="width: 145px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
                                                 <option value="" disabled>Select Code</option>
                                             </select>
+                                            <!-- <select class="form-select" id="countryCode" style="width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                                <option value="">Select Code</option>
+                                            </select> -->
                                             <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter phone number" required 
                                                 data-parsley-type="number" 
                                                 data-parsley-minlength="10" 
-                                                data-parsley-maxlength="15"
-                                                style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                                                data-parsley-maxlength="10">
                                         </div>
+                                        <!-- <small class="text-muted">Format: Country Code + Phone Number</small> -->
                                     </div>
 
                                     <!-- Payment Type -->
@@ -616,26 +676,23 @@ button {
                 }
             });
 
-            // Initialize Select2 for book selection
-            $('#bookSelect').select2({
-                placeholder: 'Search and select a book',
-                allowClear: true,
-                ajax: {
-                    url: '/api/books/search',
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            q: params.term
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: data
-                        };
-                    },
-                    cache: true
-                }
+            // Initialize Select2 for book selection with data from books.json
+            $.getJSON('data/books.json', function(data) {
+                var books = data.filter(function(book) {
+                    return book.status === 'Active';
+                });
+                var bookOptions = books.map(function(book) {
+                    return {
+                        id: book.name,
+                        text: book.name
+                    };
+                });
+                $('#bookSelect').select2({
+                    data: [{id: '', text: 'Search and select a book'}].concat(bookOptions),
+                    placeholder: 'Search and select a book',
+                    allowClear: false,
+                    width: '100%'
+                });
             });
 
             $.getJSON('data/address/Nepal/phone_no.json', function(data) {
@@ -665,12 +722,9 @@ button {
 
 
 
-            // Format phone number as user types
+            // Format phone number as user types, limit to 10 digits
             $('#phone').on('input', function() {
-                let value = $(this).val().replace(/\D/g, '');
-                if (value.length > 0) {
-                    value = value.match(new RegExp('.{1,4}', 'g')).join(' ');
-                }
+                let value = $(this).val().replace(/\D/g, '').slice(0, 10);
                 $(this).val(value);
             });
 
@@ -691,6 +745,32 @@ button {
                     return false;
                 }
             });
+
+            // Set default checked for Sewa Type: Normal and Payment Type: Free
+            $('#normal').prop('checked', true);
+            $('#free').prop('checked', true);
+
+            // National/International logic
+            $('input[name="orderType"]').change(function() {
+                if ($('#national').is(':checked')) {
+                    // Set country to Nepal
+                    $('#country').val('Nepal').trigger('change');
+                    // Set country code to +977 (Nepal)
+                    // Wait for country codes to load
+                    setTimeout(function() {
+                        $('#countryCode').val('+977').trigger('change');
+                    }, 200);
+                } else {
+                    // Clear country and country code
+                    $('#country').val('').trigger('change');
+                    $('#countryCode').val('').trigger('change');
+                }
+            });
+
+            // If National is default, trigger change on load
+            if ($('#national').is(':checked')) {
+                $('#national').trigger('change');
+            }
         });
     </script>
 </body>
