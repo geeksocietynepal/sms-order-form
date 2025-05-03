@@ -1,5 +1,7 @@
 [
     {
+
+       
         
         "orderId": "607514EKI7",
         "buyerFullName": "Prashant Das",
@@ -16,36 +18,39 @@
             "municipility": "Kathmandu",
             "province": "Bagmati",
             "country": "Nepal",
-            "postalCode": "44600"
+            "postalCode": "44600",
+            "district": "Kathmandu"
         },
         "bookOrdered": {
             "name": "Jiune Marga Nepali",
-            "thumbnail": "https://www.jagatgururampalji.org/img/publications/jeene-ki-rah-nepali.webp",
+            "thumbnail": "https://www.jagatgururampalji.org/img/publications/jeene-ki-rah-nepali.webp"
         }
 
     },
 
     {
         "orderId": "607514EKI6",
-        "buyerFullName": "Prashant Das",
-        "phoenNumber": "9866112840",
+        "buyerFullName": "Nirajan Das",
+        "phoenNumber": "9866112841",
         "paymentType": "Paid",
-        "orderType": "National",
+        "orderType": "International",
         "sewaType": "Urgent",
         "status": "Pending",
         "createdAt": "2023-10-01",
         "deliveredAt": "null",
         "address": {
-            "landmark": "Stupa Neri",
+            "landmark": "Stupa Neriss",
             "address": "Baudha",
             "city": "Kathmandu",
             "province": "Bagmati",
             "country": "Nepal",
-            "postalCode": "44600"
+            "postalCode": "44600",
+            "municipility": "Kathmandu",
+            "district": "Kathmandu"
         },
         "bookOrdered": {
                 "name": "Jiune Marga Nepali",
-                "thumbnail": "https://www.jagatgururampalji.org/img/publications/jeene-ki-rah-nepali.webp",
+                "thumbnail": "https://www.jagatgururampalji.org/img/publications/jeene-ki-rah-nepali.webp"
         }
           
         
