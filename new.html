@@ -427,6 +427,57 @@ button {
 #phone::-ms-input-placeholder { /* Microsoft Edge */
    color: #adb5bd;
 }
+
+
+
+#buyerFullName {
+    border: 1px solid #7c3aed !important; 
+    position: relative;        /* Softer purple */
+    /* border-left: none !important;                 Assume part of input group */
+    border-top-right-radius: 5px !important;      /* Rounded corners on the right */
+    border-bottom-right-radius: 5px !important;
+    border-top-left-radius: 0 !important;         /* Flat corners on the left */
+    border-bottom-left-radius: 0 !important;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08); /* Subtle shadow */
+    transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s; /* Added background transition */
+    background: #fafaff !important;
+    padding: 0.5rem 0.75rem; /* Added padding for better text spacing */
+    font-size: 1rem; /* Ensure consistent font size */
+    line-height: 1.5; /* Ensure consistent line height */
+    color: #495057; /* Standard input text color */
+    /* Ensure it takes available space within the input group if needed */
+    /* flex-grow: 1; */ /* Uncomment if needed based on parent display */
+    /* width: auto; */ /* Uncomment if needed based on parent display */
+}
+
+/* Enhanced hover state */
+#buyerFullName:hover {
+    border-color: #6d28d9 !important; /* Slightly darker purple on hover */
+}
+
+/* Enhanced focus state - align with select focus */
+#buyerFullName:focus {
+    border-color: #461ca0 !important;             /* Deeper purple on focus */
+    box-shadow: 0 0 0 2px rgba(70, 28, 160, 0.15); /* Match select focus shadow */
+    outline: none !important;                     /* Remove default outline */
+    background-color: #fff !important;            /* Brighter background on focus */
+    /* z-index: 3; Ensure focus state appears above adjacent elements */
+}
+
+/* Style placeholder */
+#buyerFullName::placeholder {
+    color: #adb5bd;
+    opacity: 1; /* Firefox */
+}
+
+#buyerFullName:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: #adb5bd;
+}
+
+#buyerFullName::-ms-input-placeholder { /* Microsoft Edge */
+   color: #adb5bd;
+}
+
 /* Add border to select fields and Select2 */
 select, .select2-container--default .select2-selection--single {
     border: 1px solid #7c3aed !important;         /* Softer purple */
@@ -572,12 +623,7 @@ select:focus {
                                     <div class="col-md-6 col-sm-12 mb-3">
                                     <label class="form-label" for="buyerFullName">Buyer Full Name</label>
                                     <div class="input-group">
-                                        <!-- <select class="form-select" id="countryCode" style="width: 145px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
-                                            <option value="" disabled>Select Code</option>
-                                        </select> -->
-                                        <!-- <select class="form-select" id="countryCode" style="width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
-                                            <option value="">Select Code</option>
-                                        </select> -->
+                                   
                                         <input type="text" class="form-control" id="buyerFullName" name="buyerFullName" placeholder="Enter Buyer Full Name" required 
                                             data-parsley-type="string" 
                                             data-parsley-minlength="20" 
